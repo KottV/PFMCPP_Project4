@@ -134,7 +134,7 @@ float FloatType::multiply( float lhs, float rhs )
 float FloatType::divide( float lhs, float rhs )
 {
     if ( rhs == 0.0f ) std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
-        return lhs / rhs;
+    return lhs / rhs;
 }
 
 double DoubleType::add( double lhs, double rhs )
@@ -155,7 +155,7 @@ double DoubleType::multiply( double lhs, double rhs )
 double DoubleType::divide( double lhs, double rhs )
 {
     if ( rhs == 0.0 ) std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
-        return lhs / rhs;
+    return lhs / rhs;
 }
 
 int IntType::add( int lhs, int rhs )
