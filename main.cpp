@@ -119,7 +119,7 @@ struct FloatType
         delete value;
     }
    
-    FloatType add(FloatType rhs);
+    FloatType add(FloatType rhs); FIXME this isn't demonstrating chaining and it is passing the function argument by value, not by const reference. Take a look at line 48 for what 'pass by const reference' looks like.
     FloatType subtract(FloatType rhs);
     FloatType multiply(FloatType rhs);
     FloatType divide(FloatType rhs);
@@ -161,7 +161,7 @@ struct IntType
 
 FloatType FloatType::add(FloatType rhs)
 {
-    return *value = *value + *rhs.value;
+    return *value = *value + *rhs.value; FIXME this is not how chaining works, and I have no idea what you are even returning here. 
 }
 
 FloatType FloatType::subtract(FloatType rhs)
