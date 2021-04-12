@@ -120,10 +120,10 @@ struct FloatType
         delete value;
     }
    
-    FloatType add(float rhs);
-    FloatType subtract(float rhs);
-    FloatType multiply(float rhs);
-    FloatType divide(float rhs);
+    FloatType add(FloatType rhs);
+    FloatType subtract(FloatType rhs);
+    FloatType multiply(FloatType rhs);
+    FloatType divide(FloatType rhs);
 };
 
 
@@ -144,26 +144,26 @@ struct IntType
 };
 
 
-FloatType FloatType::add(float rhs)
+FloatType FloatType::add(FloatType rhs)
 {
-    return *value + rhs;
+    return *value + *rhs.value;
 }
 
-FloatType FloatType::subtract(float rhs)
+FloatType FloatType::subtract(FloatType rhs)
 {
-    return *value - rhs;
+    return *value - *rhs.value;
 }
 
-FloatType FloatType::multiply(float rhs)
+FloatType FloatType::multiply(FloatType rhs)
 {
-    return *value * rhs;
+    return *value * *rhs.value;
 }
 
-FloatType FloatType::divide(float rhs)
+FloatType FloatType::divide(FloatType rhs)
 {
-    if (rhs == 0.0f)
+    if (*rhs.value == 0.0f)
         std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
-    return *value / rhs;
+    return *value / *rhs.value;
 }
 
 
@@ -235,7 +235,7 @@ int main()
     HeapA heapA;
 
     //assign heap primitives
-    FloatType ft(2.0f);
+    FloatType ft(2.5f);
 //    DoubleType dt(2);
 //    IntType it(2);
 
@@ -243,11 +243,11 @@ int main()
 
     
     std::cout << "FloatType add result=" << *ft.add(2.5f).value << std::endl;
+   
+    std::cout << "FloatType subtract result=" << *ft.subtract(2.0f).value << std::endl;
+    std::cout << "FloatType multiply result=" << *ft.multiply(2.0f).value << std::endl;
+    std::cout << "FloatType divide result=" << *ft.divide(16.0f).value << std::endl << std::endl;
     /*
-    std::cout << "FloatType subtract result=" << ft.subtract(2.0f).value << std::endl;
-    std::cout << "FloatType multiply result=" << ft.multiply(2.0f).value << std::endl;
-    std::cout << "FloatType divide result=" << ft.divide(16.0f).value << std::endl << std::endl;
-
     std::cout << "DoubleType add result=" << dt.add(2.0).value << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0).value << std::endl;
     std::cout << "DoubleType multiply result=" << dt.multiply(2.0).value << std::endl;
