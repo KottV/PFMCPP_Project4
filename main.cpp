@@ -119,12 +119,11 @@ struct FloatType
         delete value;
     }
    
-    FloatType add(FloatType rhs);
-    FloatType subtract(FloatType rhs);
-    FloatType multiply(FloatType rhs);
-    FloatType divide(FloatType rhs);
+    FloatType& add(FloatType rhs);
+    FloatType& subtract(FloatType rhs);
+    FloatType& multiply(FloatType rhs);
+    FloatType& divide(FloatType rhs);
 };
-
 
 struct DoubleType
 {
@@ -159,11 +158,12 @@ struct IntType
 };
 
 
-FloatType FloatType::add(FloatType rhs)
+FloatType& FloatType::add(FloatType rhs)
 {
-    return *value = *value + *rhs.value;
+    *this->value += *rhs.value;
+    return *this;
 }
-
+/*
 FloatType FloatType::subtract(FloatType rhs)
 {
     return *value = *value - *rhs.value;
@@ -181,7 +181,7 @@ FloatType FloatType::divide(FloatType rhs)
     return *value = *value / *rhs.value;
 }
 
-
+*/
 DoubleType DoubleType::add(DoubleType rhs )
 {
     return *value = *value + *rhs.value;
@@ -254,9 +254,9 @@ int main()
     DoubleType dt(2);
     IntType it(2);
 
-//    std::cout << "FloatType value=" << *ft.value << std::endl;
+    std::cout << "FloatType value=" << *ft.value << std::endl;
         
-    std::cout << "FloatType add result=" << *ft.add(2.0f).value << std::endl;
+    std::cout << "FloatType add result=" << *ft.add(2.0f).value << std::endl;/*
     std::cout << "FloatType subtract result=" << *ft.subtract(2.0f).value << std::endl;
     std::cout << "FloatType multiply result=" << *ft.multiply(2.0f).value << std::endl;
     std::cout << "FloatType divide result=" << *ft.divide(16.0f).value << std::endl << std::endl;
@@ -277,7 +277,7 @@ int main()
     std::cout << "New value of ft = (ft + 3.0f) * 1.5f / 5.0f = " << *ft.add(3.0f).multiply(1.5f).divide(5.0f).value << std::endl;
 
     std::cout << "---------------------\n" << std::endl;
-/*
+
     // DoubleType/IntType object instanciation and method tests
     // --------
     std::cout << "Initial value of dt: " << dt.value << std::endl;
