@@ -161,62 +161,62 @@ struct IntType
 
 FloatType FloatType::add(FloatType rhs)
 {
-    return *value + *rhs.value;
+    return *value = *value + *rhs.value;
 }
 
 FloatType FloatType::subtract(FloatType rhs)
 {
-    return *value - *rhs.value;
+    return *value = *value - *rhs.value;
 }
 
 FloatType FloatType::multiply(FloatType rhs)
 {
-    return *value * *rhs.value;
+    return *value = *value * *rhs.value;
 }
 
 FloatType FloatType::divide(FloatType rhs)
 {
     if (*rhs.value == 0.0f)
         std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
-    return *value / *rhs.value;
+    return *value = *value / *rhs.value;
 }
 
 
 DoubleType DoubleType::add(DoubleType rhs )
 {
-    return *value + *rhs.value;
+    return *value = *value + *rhs.value;
 }
 
 DoubleType DoubleType::subtract(DoubleType rhs )
 {
-    return *value - *rhs.value;
+    return *value = *value - *rhs.value;
 }
 
 DoubleType DoubleType::multiply(DoubleType rhs )
 {
-    return *value * *rhs.value;
+    return *value = *value * *rhs.value;
 }
 
 DoubleType DoubleType::divide(DoubleType rhs )
 {
     if ( *rhs.value == 0.0 )
         std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
-    return *value / *rhs.value;
+    return *value = *value / *rhs.value;
 }
 
 IntType IntType::add(IntType rhs )
 {
-    return *value + *rhs.value;
+    return *value = *value + *rhs.value;
 }
 
 IntType IntType::subtract(IntType rhs )
 {
-    return *value - *rhs.value;
+    return *value = *value - *rhs.value;
 }
 
 IntType IntType::multiply(IntType rhs )
 {
-    return *value * *rhs.value;
+    return *value = *value * *rhs.value;
 }
 
 IntType IntType::divide(IntType rhs )
@@ -227,7 +227,7 @@ IntType IntType::divide(IntType rhs )
         return *value;
     }
     
-    return *value / *rhs.value;
+    return *value = *value / *rhs.value;
 }
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
