@@ -230,7 +230,7 @@ FloatType& FloatType::multiply(float rhs)
 FloatType& FloatType::divide(float rhs)
 {
     if (rhs == 0.0f)
-        std::cout << std::endl << "warning: floating point division by zero!" << std::endl;
+        std::cout << "warning: floating point division by zero!" << std::endl;
     *value /= rhs;
     return *this;
 }
@@ -316,7 +316,7 @@ DoubleType& DoubleType::multiply(double rhs)
 DoubleType& DoubleType::divide(double rhs)
 {
     if (rhs == 0.0)
-        std::cout << std::endl << "warning: floating point division by zero!" << std::endl;
+        std::cout << "warning: floating point division by zero!" << std::endl;
     *value = *value / rhs;
     return *this;
 }
