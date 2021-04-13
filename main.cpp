@@ -108,6 +108,8 @@ good to go!
 
 
 #include <iostream>
+struct DoubleType;
+struct IntType;
 
 struct FloatType
 {
@@ -123,6 +125,10 @@ struct FloatType
     FloatType& subtract(float rhs);
     FloatType& multiply(float rhs);
     FloatType& divide(float rhs);
+
+    FloatType& add(const FloatType& ft);
+    FloatType& add(const DoubleType& dt);
+    FloatType& add(const IntType& it);
 };
 
 struct DoubleType
@@ -139,6 +145,12 @@ struct DoubleType
     DoubleType& subtract(double rhs );
     DoubleType& multiply(double rhs );
     DoubleType& divide(double rhs );
+
+    DoubleType& add(const FloatType& ft);
+    DoubleType& add(const DoubleType& dt);
+    DoubleType& add(const IntType& it);
+
+    DoubleType& multiply(const IntType& it);
 };
 
 struct IntType
@@ -184,6 +196,20 @@ FloatType& FloatType::divide(float rhs)
     return *this;
 }
 
+FloatType& FloatType::add(const FloatType& ft)
+{
+    return add(*ft.value);
+}
+
+FloatType& FloatType::add(const DoubleType& dt)
+{
+    return add(*dt.value);
+}
+
+FloatType& FloatType::add(const IntType& it)
+{
+    return add(*it.value);
+}
 
 DoubleType& DoubleType::add(double rhs )
 {
@@ -209,6 +235,26 @@ DoubleType& DoubleType::divide(double rhs )
         std::cout << std::endl << "warning, floating point division by zero returns 'inf' !" << std::endl;
     *value = *value / rhs;
     return *this;
+}
+
+DoubleType& DoubleType::add(const FloatType& ft)
+{
+    return add(*ft.value);
+}
+
+DoubleType& DoubleType::add(const DoubleType& dt)
+{
+    return add(*dt.value);
+}
+
+DoubleType& DoubleType::add(const IntType& it)
+{
+    return add(*it.value);
+}
+
+DoubleType& DoubleType::multiply(const IntType& it)
+{
+    return multiply(*it.value);
 }
 
 IntType& IntType::add(int rhs )
@@ -266,8 +312,6 @@ int main()
     DoubleType dt(2);
     IntType it(2);
 
- //   std::cout << "FloatType value=" << *ft.value << std::endl;
-        
     std::cout << "FloatType add result=" << *ft.add(2.0f).value << std::endl;
     std::cout << "FloatType subtract result=" << *ft.subtract(2.0f).value << std::endl;
     std::cout << "FloatType multiply result=" << *ft.multiply(2.0f).value << std::endl;
@@ -296,7 +340,7 @@ int main()
     std::cout << "Initial value of it: " << *it.value << std::endl;
     // --------
     std::cout << "Use of function concatenation (mixed type arguments) " << std::endl;
-  //  std::cout << "New value of dt = (dt * it) / 5.0f + ft = " << (dt.multiply(it).divide(5.0f).add(ft).value) << std::endl;
+    std::cout << "New value of dt = (dt * it) / 5.0f + ft = " << (dt.multiply(it).divide(5.0f).add(ft).value) << std::endl;
 
     std::cout << "---------------------\n" << std::endl;
 
