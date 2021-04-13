@@ -231,12 +231,14 @@ IntType& IntType::multiply(int rhs )
 
 IntType& IntType::divide(int rhs )
 {
-    if ( rhs == 0 )
+    if (rhs == 0)
     {
         std::cout << "error, integer division by zero will crash the program!" << std::endl << "returning lhs" << std::endl;
-        return *this;
     }
-    *value /= rhs;
+    else
+    {
+        *value /= rhs;
+    }
     return *this;
 }
 /*
