@@ -108,28 +108,9 @@ struct HeapA
 };
 
 #include <iostream>
-/*
-struct FloatType
-{
-    float* value = nullptr;
-
-    FloatType(float f_) : value(new float(f_)) {}
-    ~FloatType()
-    {
-        delete value;
-    }
-    
-    FloatType& add(float rhs);
-    FloatType& subtract(float rhs);
-    FloatType& multiply(float rhs);
-    FloatType& divide(float rhs);
-};
-*/
 
 struct FloatType
 {
-
-    float value = 0;
     FloatType(float f_) : value (f_){}
     operator float() { return value; }
     
@@ -137,6 +118,9 @@ struct FloatType
     FloatType& subtract(float rhs);
     FloatType& multiply(float rhs);
     FloatType& divide(float rhs);
+    
+private:
+    float value = 0;
 };
 
 FloatType& FloatType::add(float rhs)
@@ -167,8 +151,6 @@ FloatType& FloatType::divide(float rhs)
 
 struct IntType
 {
-    int value = 0;
-    
     IntType(int i_) : value(i_) {}
     operator int () { return value; }
 
@@ -178,12 +160,12 @@ struct IntType
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
     
+private:
+    int value = 0;
 };
 
 struct DoubleType
 {
-    double value = 0;
-
     DoubleType(double d_) : value(d_) {}
     operator double () { return value; }
     
@@ -191,25 +173,10 @@ struct DoubleType
     DoubleType& subtract(double rhs);
     DoubleType& multiply(double rhs);
     DoubleType& divide(double rhs);
-};
-/*
-struct IntType
-{
-    int* value = nullptr;
-    
-    IntType(int i_) : value(new int(i_)) {}
-    ~IntType()
-    {
-        delete value;
-    }
 
-    IntType& add(int rhs);
-    IntType& subtract(int rhs);
-    IntType& multiply(int rhs);
-    IntType& divide(int rhs);
+private:
+    double value = 0;
 };
-*/
-
 
 DoubleType& DoubleType::add(double rhs)
 {
