@@ -124,7 +124,7 @@ struct FloatType
     FloatType& divide(float rhs);
     
 private:
-    float* value = 0;
+    float* value;
 };
 
 FloatType& FloatType::add(float rhs)
@@ -169,7 +169,7 @@ struct IntType
     IntType& divide(int rhs);
     
 private:
-    int* value = 0;
+    int* value;
 };
 
 struct DoubleType
@@ -187,7 +187,7 @@ struct DoubleType
     DoubleType& divide(double rhs);
 
 private:
-    double* value = 0;
+    double* value;
 };
 
 DoubleType& DoubleType::add(double rhs)
