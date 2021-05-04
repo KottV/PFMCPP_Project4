@@ -46,7 +46,7 @@ Project 4: Part 4 / 9
  You will need to use Forward Declaration and out-of-class definitions to complete this.
  */
 
-
+#include <iostream>
 
 struct Point
 {
@@ -258,8 +258,6 @@ struct HeapA
     }
 };
 
-#include <iostream>
-
 struct FloatType
 {
     FloatType(float f_) : value (new float(f_)){}
@@ -307,7 +305,7 @@ FloatType& FloatType::divide(float rhs)
 struct IntType
 {
     IntType(int i_) : value(new int (i_)) {}
-    operator int () { return *value; } FIXME: keep constructors/destructors separate from member functions
+    operator int ();
     ~IntType()
     {
         delete value;
@@ -323,6 +321,10 @@ private:
     int* value;
 };
 
+IntType operator int ()
+{
+    return *value;
+}
 struct DoubleType
 {
     DoubleType(double d_) : value(new double(d_)) {}
