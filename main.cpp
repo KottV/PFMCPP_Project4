@@ -49,14 +49,22 @@ Project 4: Part 4 / 9
 #include <iostream>
 #include <math.h>
 
+
+struct FloatType;
+struct DoubleType;
+struct IntType;
+
 struct Point
 {
-    Point& multiply(float m)
-    {
-        x *= m;
-        y *= m;
-        return *this;
-    }
+    Point(FloatType ftx_, FloatType fty_);
+    Point(FloatType ftx_, float fy_);
+    
+    Point& multiply(float m);
+    Point& multiply(FloatType& ftm);
+    Point& multiply(DoubleType& dtm);
+    Point& multiply(IntType& itm);
+    
+    void toString();    
 private:
     float x{0}, y{0};
 };
@@ -186,6 +194,12 @@ struct IntType
     IntType& subtract(int rhs);
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
+    IntType& powInternal(int rhs);
+    
+    IntType& pow(const IntType&);
+    IntType& pow(const FloatType&);
+    IntType& pow(const DoubleType&);
+    IntType& pow(int);
     
 //private:
     int* value;
@@ -201,21 +215,22 @@ struct DoubleType
     DoubleType& subtract(double rhs);
     DoubleType& multiply(double rhs);
     DoubleType& divide(double rhs);
+    DoubleType& powInternal(double rhs);
+    
+    DoubleType& pow(const IntType&);
+    DoubleType& pow(const FloatType&);
+    DoubleType& pow(const DoubleType&);
+    DoubleType& pow(double);
 
 //private:
     double* value;
 };
 
-struct DoubleType;
-
 struct FloatType
 {
-    FloatType(float f_) : value (new float(f_)){}
-    ~FloatType()
-    {
-        delete value;
-    }
-    operator float() { return *value; }
+    FloatType(float f_);
+    ~FloatType();
+    operator float();
     
     FloatType& add(float rhs);
     FloatType& subtract(float rhs);
@@ -228,9 +243,10 @@ struct FloatType
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
         
-private:
+//private:
     float* value;
 };
+
 
 FloatType& FloatType::add(float rhs)
 {
@@ -284,8 +300,6 @@ FloatType& FloatType::pow(float f_)
     return powInternal(static_cast<float>(f_));
 }
 
-
-
 IntType::IntType(int i_) : value(new int (i_)) {}
 IntType::~IntType()
 {
@@ -308,6 +322,16 @@ DoubleType::operator double ()
     return *value;
 }
 
+FloatType::FloatType(float f_) : value(new float (f_)) {}
+FloatType::~FloatType()
+{
+    delete value;
+}
+
+FloatType::operator float ()
+{
+    return *value;
+}
 
 
 DoubleType& DoubleType::add(double rhs)
@@ -367,6 +391,95 @@ IntType& IntType::divide(int rhs)
     return *this;
 }
 
+IntType& IntType::powInternal(int rhs)
+{
+    *value = std::pow( *value, rhs );
+    return *this;
+}
+
+IntType& IntType::pow(const FloatType& ft)
+{
+    return powInternal(static_cast<float>(*ft.value));
+}
+
+IntType& IntType::pow(const IntType& it)
+{
+    return powInternal(static_cast<float>(*it.value));
+}
+
+IntType& IntType::pow(const DoubleType& dt)
+{
+    return powInternal(static_cast<float>(*dt.value));
+}
+
+IntType& IntType::pow(int i_)
+{
+    return powInternal(static_cast<int>(i_));
+}
+
+DoubleType& DoubleType::powInternal(double rhs)
+{
+    *value = std::pow( *value, rhs );
+    return *this;
+}
+
+DoubleType& DoubleType::pow(const FloatType& ft)
+{
+    return powInternal(static_cast<float>(*ft.value));
+}
+
+DoubleType& DoubleType::pow(const IntType& it)
+{
+    return powInternal(static_cast<float>(*it.value));
+}
+
+DoubleType& DoubleType::pow(const DoubleType& dt)
+{
+    return powInternal(static_cast<float>(*dt.value));
+}
+
+DoubleType& DoubleType::pow(double d_)
+{
+    return powInternal(static_cast<double>(d_));
+}
+
+Point::Point(FloatType ftx_, FloatType fty_) : x (*ftx_.value), y (*fty_.value) {}
+Point::Point(FloatType ftx_, float fy_) : x (*ftx_.value), y (fy_) {}
+
+Point& Point::multiply(float m)
+{
+    x *= m;
+    y *= m;
+    return *this;
+}
+
+Point& Point::multiply(FloatType& ftm)
+{
+    //x *= *ftm.value;
+    //y *= *ftm.value;
+    
+    std::cout << "whataffff: " << *ftm.value <<std::endl;
+    return *this;
+}
+
+Point& Point::multiply(DoubleType& dtm)
+{
+    x *= *dtm.value;
+    y *= *dtm.value;
+    return *this;
+}
+
+Point& Point::multiply(IntType& itm)
+{
+    x *= *itm.value;
+    y *= *itm.value;
+    return *this;
+}
+
+void Point::toString()
+{
+    std::cout<< "{ x: "<< x << ", y: "<< y <<" }" <<std::endl;
+}
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -421,7 +534,7 @@ void part4()
     std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1.pow(ftExp)  << std::endl;    
     std::cout << "pow(ft1, dtExp) = " << ft1 << "^" << dtExp << " = " << ft1.pow(dtExp)  << std::endl;    
     std::cout << "---------------------\n" << std::endl;  
-/*
+
     // Power tests with DoubleType
     std::cout << "Power tests with DoubleType " << std::endl;
     std::cout << "pow(dt1, doubleExp) = " << dt1 << "^" << doubleExp << " = " << dt1.pow(intExp)  << std::endl;
@@ -481,7 +594,7 @@ void part4()
     p3.multiply(it2); 
     p3.toString();   
     std::cout << "---------------------\n" << std::endl;
-    */
+    
 }
 
 int main()
