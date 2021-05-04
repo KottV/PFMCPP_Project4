@@ -297,7 +297,7 @@ FloatType& FloatType::pow(const DoubleType& dt)
 
 FloatType& FloatType::pow(float f_)
 {
-    return powInternal(static_cast<float>(f_));
+    return powInternal(f_);
 }
 
 IntType::IntType(int i_) : value(new int (i_)) {}
@@ -399,22 +399,22 @@ IntType& IntType::powInternal(int rhs)
 
 IntType& IntType::pow(const FloatType& ft)
 {
-    return powInternal(static_cast<float>(*ft.value));
+    return powInternal(static_cast<int>(*ft.value));
 }
 
 IntType& IntType::pow(const IntType& it)
 {
-    return powInternal(static_cast<float>(*it.value));
+    return powInternal(static_cast<int>(*it.value));
 }
 
 IntType& IntType::pow(const DoubleType& dt)
 {
-    return powInternal(static_cast<float>(*dt.value));
+    return powInternal(static_cast<int>(*dt.value));
 }
 
 IntType& IntType::pow(int i_)
 {
-    return powInternal(static_cast<int>(i_));
+    return powInternal(i_);
 }
 
 DoubleType& DoubleType::powInternal(double rhs)
@@ -425,17 +425,17 @@ DoubleType& DoubleType::powInternal(double rhs)
 
 DoubleType& DoubleType::pow(const FloatType& ft)
 {
-    return powInternal(static_cast<float>(*ft.value));
+    return powInternal(static_cast<int>(*ft.value));
 }
 
 DoubleType& DoubleType::pow(const IntType& it)
 {
-    return powInternal(static_cast<float>(*it.value));
+    return powInternal(static_cast<int>(*it.value));
 }
 
 DoubleType& DoubleType::pow(const DoubleType& dt)
 {
-    return powInternal(static_cast<float>(*dt.value));
+    return powInternal(static_cast<int>(*dt.value));
 }
 
 DoubleType& DoubleType::pow(double d_)
@@ -609,7 +609,7 @@ int main()
 
     std::cout << "FloatType add result=" << ft.add(2.0f) << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract(2.0f) << std::endl;
-    std::cout << "FloatType multiply result=" << ft.multiply(2.0f) << std::endl;
+//     std::cout << "FloatType multiply result=" << ft.multiply(2.0f) << std::endl;
     std::cout << "FloatType divide result=" << ft.divide(16.0f) << std::endl << std::endl;
     
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
