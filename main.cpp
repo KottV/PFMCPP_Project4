@@ -56,9 +56,8 @@ struct IntType;
 
 struct Point
 {
-    Point(FloatType ftx_, FloatType fty_);
-    Point(FloatType ftx_, float fy_);
-    
+    Point(float fx_, float fy_);
+        
     Point& multiply(float m);
     Point& multiply(FloatType& ftm);
     Point& multiply(DoubleType& dtm);
@@ -323,6 +322,7 @@ DoubleType::operator double ()
 }
 
 FloatType::FloatType(float f_) : value(new float (f_)) {}
+
 FloatType::~FloatType()
 {
     delete value;
@@ -443,8 +443,7 @@ DoubleType& DoubleType::pow(double d_)
     return powInternal(static_cast<double>(d_));
 }
 
-Point::Point(FloatType ftx_, FloatType fty_) : x (*ftx_.value), y (*fty_.value) {}
-Point::Point(FloatType ftx_, float fy_) : x (*ftx_.value), y (fy_) {}
+Point::Point(float fx_, float fy_) : x (fx_), y (fy_) {}
 
 Point& Point::multiply(float m)
 {
@@ -455,25 +454,17 @@ Point& Point::multiply(float m)
 
 Point& Point::multiply(FloatType& ftm)
 {
-    //x *= *ftm.value;
-    //y *= *ftm.value;
-    
-    std::cout << "whataffff: " << *ftm.value <<std::endl;
-    return *this;
+    return multiply(*ftm.value);
 }
 
 Point& Point::multiply(DoubleType& dtm)
 {
-    x *= *dtm.value;
-    y *= *dtm.value;
-    return *this;
+    return multiply(*dtm.value);
 }
 
 Point& Point::multiply(IntType& itm)
 {
-    x *= *itm.value;
-    y *= *itm.value;
-    return *this;
+    return multiply(*itm.value);
 }
 
 void Point::toString()
