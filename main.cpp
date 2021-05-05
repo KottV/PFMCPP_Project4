@@ -186,64 +186,62 @@ struct HeapA
 struct IntType
 {
     IntType(int i_);
-    operator int ();
+    operator int () const;
     ~IntType();
     
     IntType& add(int rhs);
     IntType& subtract(int rhs);
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
-    IntType& powInternal(int rhs);
-    
     IntType& pow(const IntType&);
     IntType& pow(const FloatType&);
     IntType& pow(const DoubleType&);
     IntType& pow(int);
     
-//private:
+private:
     int* value;
+    IntType& powInternal(int rhs);
 };
 
 struct DoubleType
 {
     DoubleType(double d_);
     ~DoubleType();
-    operator double ();
+    operator double () const;
     
     DoubleType& add(double rhs);
     DoubleType& subtract(double rhs);
     DoubleType& multiply(double rhs);
     DoubleType& divide(double rhs);
-    DoubleType& powInternal(double rhs);
     
     DoubleType& pow(const IntType&);
     DoubleType& pow(const FloatType&);
     DoubleType& pow(const DoubleType&);
     DoubleType& pow(double);
 
-//private:
+private:
     double* value;
+    DoubleType& powInternal(double rhs);
 };
 
 struct FloatType
 {
     FloatType(float f_);
     ~FloatType();
-    operator float();
+    operator float() const;
     
     FloatType& add(float rhs);
     FloatType& subtract(float rhs);
     FloatType& multiply(float rhs);
     FloatType& divide(float rhs);
-    FloatType& powInternal(float rhs);
-    
     FloatType& pow(const IntType&);
     FloatType& pow(const FloatType&);
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
         
-//private:
+private:
     float* value;
+    FloatType& powInternal(float rhs);
 };
 
 
@@ -281,17 +279,17 @@ FloatType& FloatType::powInternal(float rhs)
 
 FloatType& FloatType::pow(const FloatType& ft)
 {
-    return powInternal(static_cast<float>(*ft.value));
+    return powInternal(static_cast<float>(ft));
 }
 
 FloatType& FloatType::pow(const IntType& it)
 {
-    return powInternal(static_cast<float>(*it.value));
+    return powInternal(static_cast<float>(static_cast<int>(it)));
 }
 
 FloatType& FloatType::pow(const DoubleType& dt)
 {
-    return powInternal(static_cast<float>(*dt.value));
+    return powInternal(static_cast<float>(static_cast<double>(dt)));
 }
 
 FloatType& FloatType::pow(float f_)
@@ -305,7 +303,7 @@ IntType::~IntType()
     delete value;
 }
 
-IntType::operator int ()
+IntType::operator int () const
 {
     return *value;
 }
@@ -316,7 +314,7 @@ DoubleType::~DoubleType()
     delete value;
 }
 
-DoubleType::operator double ()
+DoubleType::operator double () const
 {
     return *value;
 }
@@ -328,7 +326,7 @@ FloatType::~FloatType()
     delete value;
 }
 
-FloatType::operator float ()
+FloatType::operator float () const
 {
     return *value;
 }
@@ -399,17 +397,17 @@ IntType& IntType::powInternal(int rhs)
 
 IntType& IntType::pow(const FloatType& ft)
 {
-    return powInternal(static_cast<int>(*ft.value));
+    return powInternal(static_cast<int>(static_cast<float>(ft)));
 }
 
 IntType& IntType::pow(const IntType& it)
 {
-    return powInternal(static_cast<int>(*it.value));
+    return powInternal(static_cast<int>(it));
 }
 
 IntType& IntType::pow(const DoubleType& dt)
 {
-    return powInternal(static_cast<int>(*dt.value));
+    return powInternal(static_cast<int>(static_cast<double>(dt)));
 }
 
 IntType& IntType::pow(int i_)
@@ -425,17 +423,17 @@ DoubleType& DoubleType::powInternal(double rhs)
 
 DoubleType& DoubleType::pow(const FloatType& ft)
 {
-    return powInternal(static_cast<int>(*ft.value));
+    return powInternal(static_cast<double>(static_cast<float>(ft)));
 }
 
 DoubleType& DoubleType::pow(const IntType& it)
 {
-    return powInternal(static_cast<int>(*it.value));
+    return powInternal(static_cast<double>(static_cast<int>(it)));
 }
 
 DoubleType& DoubleType::pow(const DoubleType& dt)
 {
-    return powInternal(static_cast<int>(*dt.value));
+    return powInternal(static_cast<double>(dt));
 }
 
 DoubleType& DoubleType::pow(double d_)
@@ -454,17 +452,17 @@ Point& Point::multiply(float m)
 
 Point& Point::multiply(FloatType& ftm)
 {
-    return multiply(*ftm.value);
+    return multiply(static_cast<float>(ftm));
 }
 
 Point& Point::multiply(DoubleType& dtm)
 {
-    return multiply(*dtm.value);
+    return multiply(static_cast<float>(static_cast<double>(dtm)));
 }
 
 Point& Point::multiply(IntType& itm)
 {
-    return multiply(*itm.value);
+    return multiply(static_cast<float>(static_cast<int>(itm)));
 }
 
 void Point::toString()
@@ -521,7 +519,7 @@ void part4()
     // Power tests with FloatType
     std::cout << "Power tests with FloatType " << std::endl;
     std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1.pow(floatExp)  << std::endl;
-    std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1.pow(itExp)  << std::endl;
+/*    std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1.pow(itExp)  << std::endl;
     std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1.pow(ftExp)  << std::endl;    
     std::cout << "pow(ft1, dtExp) = " << ft1 << "^" << dtExp << " = " << ft1.pow(dtExp)  << std::endl;    
     std::cout << "---------------------\n" << std::endl;  
@@ -541,7 +539,7 @@ void part4()
     std::cout << "pow(it1, ftExp) = " << it1 << "^" << ftExp << " = " << it1.pow(ftExp)  << std::endl;    
     std::cout << "pow(it1, dtExp) = " << it1 << "^" << dtExp << " = " << it1.pow(dtExp)  << std::endl;    
     std::cout << "===============================\n" << std::endl; 
-
+    */
     // ------------------------------------------------------------
     //                          Point tests
     // ------------------------------------------------------------
@@ -600,7 +598,7 @@ int main()
 
     std::cout << "FloatType add result=" << ft.add(2.0f) << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract(2.0f) << std::endl;
-//     std::cout << "FloatType multiply result=" << ft.multiply(2.0f) << std::endl;
+    std::cout << "FloatType multiply result=" << ft.multiply(2.0f) << std::endl;
     std::cout << "FloatType divide result=" << ft.divide(16.0f) << std::endl << std::endl;
     
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
