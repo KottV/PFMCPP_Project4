@@ -391,7 +391,7 @@ IntType& IntType::divide(int rhs)
 
 IntType& IntType::powInternal(int rhs)
 {
-    *value = std::pow( *value, rhs );
+    *value = static_cast<int>(std::pow( *value, rhs ));
     return *this;
 }
 
