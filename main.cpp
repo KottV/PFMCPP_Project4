@@ -56,7 +56,7 @@ struct IntType;
 
 struct Point
 {
-    Point(float fx_, float fy_);
+    Point(FloatType ftx_, FloatType fty_);
         
     Point& multiply(float m);
     Point& multiply(FloatType& ftm);
@@ -323,7 +323,7 @@ FloatType::FloatType(float f_) : value(new float (f_)) {}
 
 FloatType::~FloatType()
 {
-    delete value;
+//    delete value;
 }
 
 FloatType::operator float () const
@@ -441,7 +441,7 @@ DoubleType& DoubleType::pow(double d_)
     return powInternal(static_cast<double>(d_));
 }
 
-Point::Point(float fx_, float fy_) : x (fx_), y (fy_) {}
+Point::Point(FloatType ftx_, FloatType fty_) : x (static_cast<float>(ftx_)), y (static_cast<float>(fty_)) {}
 
 Point& Point::multiply(float m)
 {
