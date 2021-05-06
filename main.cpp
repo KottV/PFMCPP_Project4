@@ -509,7 +509,7 @@ void part4()
     FloatType ft1(2);
     DoubleType dt1(2);
     IntType it1(2);    
-    float floatExp = 2.0f;
+    int floatExp = 2.0f;
     int doubleExp = 2.0;
     int intExp = 2;
     IntType itExp(2);
@@ -518,7 +518,7 @@ void part4()
     
     // Power tests with FloatType
     std::cout << "Power tests with FloatType " << std::endl;
-    std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1.pow(floatExp)  << std::endl;
+    std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1.pow(static_cast<float>(floatExp))  << std::endl;
     std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1.pow(itExp)  << std::endl;
     std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1.pow(ftExp)  << std::endl;    
     std::cout << "pow(ft1, dtExp) = " << ft1 << "^" << dtExp << " = " << ft1.pow(dtExp)  << std::endl;    
