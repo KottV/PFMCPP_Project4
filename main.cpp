@@ -509,7 +509,7 @@ void part4()
     FloatType ft1(2);
     DoubleType dt1(2);
     IntType it1(2);    
-    int floatExp = 2.0f;
+    float floatExp = 2.0f;
     int doubleExp = 2.0;
     int intExp = 2;
     IntType itExp(2);
