@@ -491,7 +491,7 @@ void part3()
     IntType it(34);
     DoubleType pi(3.14);
     
-    std::cout << "The result of FloatType^3 divided by IntType is: " << ft.multiply(ft).multiply(ft).divide(static_cast<float>(it)) << std::endl;
+    std::cout << "The result of FloatType^4 divided by IntType is: " << ft.multiply(ft).multiply(ft).divide(static_cast<float>(it)) << std::endl;
     std::cout << "The result of DoubleType times 3 plus IntType is : " << dt.multiply(3).add(it) << std::endl;
     std::cout << "The result of IntType divided by 3.14 multiplied by DoubleType minus FloatType is: " << it.divide(static_cast<int>(pi)).multiply(static_cast<int>(dt)).subtract(static_cast<int>(ft)) << std::endl;
     std::cout << "An operation followed by attempts to divide by 0, which are ignored and warns user: " << std::endl;
