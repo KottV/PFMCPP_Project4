@@ -54,21 +54,6 @@ struct FloatType;
 struct DoubleType;
 struct IntType;
 
-struct Point
-{
-    Point(const FloatType& ftx_, const FloatType& fty_);
-        
-    Point& multiply(float m);
-    Point& multiply(FloatType& ftm);
-    Point& multiply(DoubleType& dtm);
-    Point& multiply(IntType& itm);
-    
-    void toString();    
-private:
-    float x{0}, y{0};
-};
-
-
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings.  
@@ -226,7 +211,7 @@ private:
 
 struct FloatType
 {
-    FloatType(float f_);
+    explicit FloatType(float f_);
     ~FloatType();
     operator float() const;
     
@@ -297,6 +282,18 @@ FloatType& FloatType::pow(float f_)
     return powInternal(f_);
 }
 
+FloatType::FloatType(float f_) : value(new float(f_)) {}
+
+FloatType::~FloatType()
+{
+    delete value;
+}
+
+FloatType::operator float() const
+{
+    return *value;
+}
+
 IntType::IntType(int i_) : value(new int (i_)) {}
 IntType::~IntType()
 {
@@ -318,19 +315,6 @@ DoubleType::operator double () const
 {
     return *value;
 }
-
-FloatType::FloatType(float f_) : value(new float (f_)) {}
-
-FloatType::~FloatType()
-{
-    delete value;
-}
-
-FloatType::operator float () const
-{
-    return *value;
-}
-
 
 DoubleType& DoubleType::add(double rhs)
 {
@@ -441,7 +425,23 @@ DoubleType& DoubleType::pow(double d_)
     return powInternal(static_cast<double>(d_));
 }
 
-Point::Point(const FloatType& ftx_, const FloatType& fty_) : x (static_cast<float>(ftx_)), y (static_cast<float>(fty_)) {}
+struct Point
+{
+    Point(const float& fx_, const float& fy_) : x(fx_), y(fy_) {}
+
+    Point(const FloatType& ftx_, const FloatType& fty_) : Point(static_cast<float>(ftx_), static_cast<float>(fty_)) {}
+    Point(const IntType& itx_, const IntType& ity_) : Point(static_cast<int>(itx_), static_cast<int>(ity_)) {}
+    Point(const DoubleType& dtx_, const DoubleType& dty_) : Point(static_cast<double>(dtx_), static_cast<double>(dty_)) {}
+    
+    Point& multiply(float m);
+    Point& multiply(FloatType& ftm);
+    Point& multiply(DoubleType& dtm);
+    Point& multiply(IntType& itm);
+
+    void toString();
+private:
+    float x{ 0 }, y{ 0 };
+};
 
 Point& Point::multiply(float m)
 {
@@ -457,12 +457,12 @@ Point& Point::multiply(FloatType& ftm)
 
 Point& Point::multiply(DoubleType& dtm)
 {
-    return multiply(static_cast<float>(static_cast<double>(dtm)));
+    return multiply(static_cast<float>(dtm));
 }
 
 Point& Point::multiply(IntType& itm)
 {
-    return multiply(static_cast<float>(static_cast<int>(itm)));
+    return multiply(static_cast<float>(itm));
 }
 
 void Point::toString()
