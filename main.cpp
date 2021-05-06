@@ -430,8 +430,8 @@ struct Point
     Point(const float& fx_, const float& fy_) : x(fx_), y(fy_) {}
 
     Point(const FloatType& ftx_, const FloatType& fty_) : Point(static_cast<float>(ftx_), static_cast<float>(fty_)) {}
-    Point(const IntType& itx_, const IntType& ity_) : Point(static_cast<int>(itx_), static_cast<int>(ity_)) {}
-    Point(const DoubleType& dtx_, const DoubleType& dty_) : Point(static_cast<double>(dtx_), static_cast<double>(dty_)) {}
+    Point(const IntType& itx_, const IntType& ity_) : Point(static_cast<float>(static_cast<int>(itx_)), static_cast<float>(static_cast<int>(ity_))) {}
+    Point(const DoubleType& dtx_, const DoubleType& dty_) : Point(static_cast<float>(static_cast<double>(dtx_)), static_cast<float>(static_cast<double>(dty_))) {}
     
     Point& multiply(float m);
     Point& multiply(FloatType& ftm);
