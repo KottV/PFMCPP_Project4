@@ -201,6 +201,18 @@ struct IntType
     {
         return { *value += other };
     }
+    IntType operator-=(const int& other)
+    {
+        return { *value -= other };
+    }
+    IntType operator*=(const int& other)
+    {
+        return { *value *= other };
+    }
+    IntType operator/=(const int& other)
+    {
+        return { *value /= other };
+    }
     
 private:
     int* value;
@@ -224,6 +236,23 @@ struct DoubleType
     DoubleType& pow(const DoubleType&);
     DoubleType& pow(double);
 
+    DoubleType operator+=(const double& other)
+    {
+        return { *value += other };
+    }
+    DoubleType operator-=(const double& other)
+    {
+        return { *value -= other };
+    }
+    DoubleType operator*=(const double& other)
+    {
+        return { *value *= other };
+    }
+    DoubleType operator/=(const double& other)
+    {
+        return { *value /= other };
+    }
+
 private:
     double* value;
     DoubleType& powInternal(double rhs);
@@ -243,6 +272,23 @@ struct FloatType
     FloatType& pow(const FloatType&);
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
+
+    FloatType operator+=(const float& other)
+    {
+        return { *value += other };
+    }
+    FloatType operator-=(const float& other)
+    {
+        return { *value -= other };
+    }
+    FloatType operator*=(const float& other)
+    {
+        return { *value *= other };
+    }
+    FloatType operator/=(const float& other)
+    {
+        return { *value /= other };
+    }
         
 private:
     float* value;
