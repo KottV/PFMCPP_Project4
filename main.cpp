@@ -188,7 +188,7 @@ struct IntType
     operator int () const;
     ~IntType();
     
-    IntType operator+=(const int& other);
+    IntType& operator+=(const int& other);
     IntType& subtract(int rhs);
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
@@ -217,9 +217,10 @@ private:
 };
 
 
-IntType IntType::operator+=(const int& other)
+IntType& IntType::operator+=(const int& other)
 {
-    return { *value += other };
+    *value += other;
+    return *this;
 }
 
 struct DoubleType
