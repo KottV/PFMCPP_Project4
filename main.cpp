@@ -192,10 +192,10 @@ struct IntType
     IntType& operator-=(const int& other);
     IntType& operator*=(const int& other);
     IntType& operator/=(const int& other);
-    IntType& pow(const IntType&);
-    IntType& pow(const FloatType&);
-    IntType& pow(const DoubleType&);
-    IntType& pow(int);
+    IntType& operator^=(const IntType&);
+    IntType& operator^=(const FloatType&);
+    IntType& operator^=(const DoubleType&);
+    IntType& operator^=(int);
     
 private:
     int* value;
@@ -214,10 +214,10 @@ struct DoubleType
     DoubleType& operator*=(const double& other);
     DoubleType& operator/=(const double& other);
     
-    DoubleType& pow(const IntType&);
-    DoubleType& pow(const FloatType&);
-    DoubleType& pow(const DoubleType&);
-    DoubleType& pow(double);
+    DoubleType& operator^=(const IntType&);
+    DoubleType& operator^=(const FloatType&);
+    DoubleType& operator^=(const DoubleType&);
+    DoubleType& operator^=(double);
 
 private:
     double* value;
@@ -234,10 +234,10 @@ struct FloatType
     FloatType& operator-=(const float& other);
     FloatType& operator*=(const float& other);
     FloatType& operator/=(const float& other);
-    FloatType& pow(const IntType&);
-    FloatType& pow(const FloatType&);
-    FloatType& pow(const DoubleType&);
-    FloatType& pow(float);
+    FloatType& operator^=(const IntType&);
+    FloatType& operator^=(const FloatType&);
+    FloatType& operator^=(const DoubleType&);
+    FloatType& operator^=(float);
 
 private:
     float* value;
@@ -278,22 +278,22 @@ FloatType& FloatType::powInternal(float rhs)
     return *this;
 }
 
-FloatType& FloatType::pow(const FloatType& ft)
+FloatType& FloatType::operator^=(const FloatType& ft)
 {
     return powInternal(static_cast<float>(ft));
 }
 
-FloatType& FloatType::pow(const IntType& it)
+FloatType& FloatType::operator^=(const IntType& it)
 {
     return powInternal(static_cast<float>(static_cast<int>(it)));
 }
 
-FloatType& FloatType::pow(const DoubleType& dt)
+FloatType& FloatType::operator^=(const DoubleType& dt)
 {
     return powInternal(static_cast<float>(static_cast<double>(dt)));
 }
 
-FloatType& FloatType::pow(float f_)
+FloatType& FloatType::operator^=(float f_)
 {
     return powInternal(f_);
 }
@@ -395,22 +395,22 @@ IntType& IntType::powInternal(int rhs)
     return *this;
 }
 
-IntType& IntType::pow(const FloatType& ft)
+IntType& IntType::operator^=(const FloatType& ft)
 {
     return powInternal(static_cast<int>(static_cast<float>(ft)));
 }
 
-IntType& IntType::pow(const IntType& it)
+IntType& IntType::operator^=(const IntType& it)
 {
     return powInternal(static_cast<int>(it));
 }
 
-IntType& IntType::pow(const DoubleType& dt)
+IntType& IntType::operator^=(const DoubleType& dt)
 {
     return powInternal(static_cast<int>(static_cast<double>(dt)));
 }
 
-IntType& IntType::pow(int i_)
+IntType& IntType::operator^=(int i_)
 {
     return powInternal(i_);
 }
@@ -421,22 +421,22 @@ DoubleType& DoubleType::powInternal(double rhs)
     return *this;
 }
 
-DoubleType& DoubleType::pow(const FloatType& ft)
+DoubleType& DoubleType::operator^=(const FloatType& ft)
 {
     return powInternal(static_cast<double>(static_cast<float>(ft)));
 }
 
-DoubleType& DoubleType::pow(const IntType& it)
+DoubleType& DoubleType::operator^=(const IntType& it)
 {
     return powInternal(static_cast<double>(static_cast<int>(it)));
 }
 
-DoubleType& DoubleType::pow(const DoubleType& dt)
+DoubleType& DoubleType::operator^=(const DoubleType& dt)
 {
     return powInternal(static_cast<double>(dt));
 }
 
-DoubleType& DoubleType::pow(double d_)
+DoubleType& DoubleType::operator^=(double d_)
 {
     return powInternal(static_cast<double>(d_));
 }
@@ -556,26 +556,50 @@ void part4()
     
     // Power tests with FloatType
     std::cout << "Power tests with FloatType " << std::endl;
-    std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1.pow(floatExp)  << std::endl;
-    std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1.pow(itExp)  << std::endl;
-    std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1.pow(ftExp)  << std::endl;    
-    std::cout << "pow(ft1, dtExp) = " << ft1 << "^" << dtExp << " = " << ft1.pow(dtExp)  << std::endl;    
+    
+    ft1^=floatExp;
+    std::cout << "pow(ft1, floatExp) = " << ft1 << "^" << floatExp << " = " << ft1 << std::endl;
+    
+    ft1^=itExp;
+    std::cout << "pow(ft1, itExp) = " << ft1 << "^" << itExp << " = " << ft1 << std::endl;
+    
+    ft1^=ftExp;
+    std::cout << "pow(ft1, ftExp) = " << ft1 << "^" << ftExp << " = " << ft1 << std::endl;    
+    
+    ft1^=dtExp;
+    std::cout << "pow(ft1, dtExp) = " << ft1 << "^" << dtExp << " = " << ft1 << std::endl;    
     std::cout << "---------------------\n" << std::endl;  
 
     // Power tests with DoubleType
     std::cout << "Power tests with DoubleType " << std::endl;
-    std::cout << "pow(dt1, doubleExp) = " << dt1 << "^" << doubleExp << " = " << dt1.pow(intExp)  << std::endl;
-    std::cout << "pow(dt1, itExp) = " << dt1 << "^" << itExp << " = " << dt1.pow(itExp)  << std::endl;
-    std::cout << "pow(dt1, ftExp) = " << dt1 << "^" << ftExp << " = " << dt1.pow(ftExp)  << std::endl;    
-    std::cout << "pow(dt1, dtExp) = " << dt1 << "^" << dtExp << " = " << dt1.pow(dtExp)  << std::endl;    
+    
+    dt1^=doubleExp;
+    std::cout << "pow(dt1, doubleExp) = " << dt1 << "^" << doubleExp << " = " << dt1 << std::endl;
+    
+    dt1^=itExp;
+    std::cout << "pow(dt1, itExp) = " << dt1 << "^" << itExp << " = " << dt1 << std::endl;
+    
+    dt1^=ftExp;
+    std::cout << "pow(dt1, ftExp) = " << dt1 << "^" << ftExp << " = " << dt1 << std::endl;
+    
+    dt1^=dtExp;
+    std::cout << "pow(dt1, dtExp) = " << dt1 << "^" << dtExp << " = " << dt1 << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 
     // Power tests with IntType
     std::cout << "Power tests with IntType " << std::endl;
-    std::cout << "pow(it1, intExp) = " << it1 << "^" << intExp << " = " << it1.pow(intExp)  << std::endl;
-    std::cout << "pow(it1, itExp) = " << it1 << "^" << itExp << " = " << it1.pow(itExp)  << std::endl;
-    std::cout << "pow(it1, ftExp) = " << it1 << "^" << ftExp << " = " << it1.pow(ftExp)  << std::endl;    
-    std::cout << "pow(it1, dtExp) = " << it1 << "^" << dtExp << " = " << it1.pow(dtExp)  << std::endl;    
+    
+    it1^=intExp;
+    std::cout << "pow(it1, intExp) = " << it1 << "^" << intExp << " = " << it1 << std::endl;
+    
+    it1^=itExp;
+    std::cout << "pow(it1, itExp) = " << it1 << "^" << itExp << " = " << it1 << std::endl;
+    
+    it1^=ftExp;
+    std::cout << "pow(it1, ftExp) = " << it1 << "^" << ftExp << " = " << it1 << std::endl;    
+    
+    it1^=dtExp;
+    std::cout << "pow(it1, dtExp) = " << it1 << "^" << dtExp << " = " << it1 << std::endl;    
     std::cout << "===============================\n" << std::endl; 
     
     // ------------------------------------------------------------
