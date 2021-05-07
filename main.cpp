@@ -659,7 +659,7 @@ int main()
 // --------
     ft+=3.0f;
     ft*=1.5f;
-    ft-=5.0f;
+    ft/=5.0f;
     std::cout << "New value of ft = (ft + 3.0f) * 1.5f / 5.0f = " << ft << std::endl;
 
     std::cout << "---------------------\n" << std::endl;
