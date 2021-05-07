@@ -272,7 +272,7 @@ struct FloatType
     FloatType& pow(const FloatType&);
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
-
+/*
     FloatType operator+=(const float& other)
     {
         return { *value += other };
@@ -289,7 +289,7 @@ struct FloatType
     {
         return { *value /= other };
     }
-        
+*/        
 private:
     float* value;
     FloatType& powInternal(float rhs);
@@ -663,11 +663,11 @@ int main()
     DoubleType dt(2);
     IntType it(2);
 
-    FloatType ftA(3.0f);
     IntType itA(2);
-
+    dt *= 1.9876;
     itA += 10;
-    std::cout << "FloatType A+B result=" << itA << std::endl;
+    std::cout << "IntType A+10 result=" << itA << std::endl;
+    std::cout << "DoubleType mult result=" << dt << std::endl;
 /*
 * 
     std::cout << "FloatType add result=" << ft.add(2.0f) << std::endl;
