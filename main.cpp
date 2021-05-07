@@ -719,7 +719,7 @@ int main()
     
     dt*=it;
     dt/=static_cast<double>(5.0f);
-    dt+=ft;
+    dt+=static_cast<double>(ft);
     std::cout << "New value of dt = (dt * it) / 5.0f + ft = " << dt << std::endl;
 
     std::cout << "---------------------\n" << std::endl;
