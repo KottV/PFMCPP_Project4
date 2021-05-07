@@ -188,7 +188,7 @@ struct IntType
     operator int () const;
     ~IntType();
     
-    IntType& add(int rhs);
+    IntType operator+=(const int& other);
     IntType& subtract(int rhs);
     IntType& multiply(int rhs);
     IntType& divide(int rhs);
@@ -197,10 +197,6 @@ struct IntType
     IntType& pow(const DoubleType&);
     IntType& pow(int);
     
-    IntType operator+=(const int& other)
-    {
-        return { *value += other };
-    }
     IntType operator-=(const int& other)
     {
         return { *value -= other };
@@ -219,6 +215,12 @@ private:
     IntType& powInternal(int rhs);
 
 };
+
+
+IntType IntType::operator+=(const int& other)
+{
+    return { *value += other };
+}
 
 struct DoubleType
 {
@@ -409,11 +411,11 @@ DoubleType& DoubleType::divide(double rhs)
     return *this;
 }
 
-IntType& IntType::add(int rhs)
-{
-    *value += rhs;
-    return *this;
-}
+//IntType& IntType::add(int rhs)
+//{
+//    *value += rhs;
+//    return *this;
+//}
 
 IntType& IntType::subtract(int rhs)
 {
@@ -565,7 +567,7 @@ void part3()
     std::cout << it.multiply(it).divide(0).divide(0.0f).divide(0.0) << std::endl;
 
     std::cout << "FloatType x IntType  =  " << it.multiply(static_cast<int>(ft)) << std::endl;
-    std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it.add(static_cast<int>(dt)).add(static_cast<int>(ft)).multiply(24) << std::endl;
+//    std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it.add(static_cast<int>(dt)).add(static_cast<int>(ft)).multiply(24) << std::endl;
 
 }
 void part4()
