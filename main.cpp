@@ -468,17 +468,17 @@ Point& Point::operator*=(float m)
 
 Point& Point::operator*=(FloatType& ftm)
 {
-    return *this*=(static_cast<float>(ftm));
+    return *this *= (static_cast<float>(ftm));
 }
 
 Point& Point::operator*=(DoubleType& dtm)
 {
-    return *this*=(static_cast<float>(dtm));
+    return *this *= (static_cast<float>(dtm));
 }
 
 Point& Point::operator*=(IntType& itm)
 {
-    return *this*=(static_cast<float>(itm));
+    return *this *= (static_cast<float>(itm));
 }
 
 void Point::toString()
@@ -591,7 +591,7 @@ void part4()
     Point p0(ft2, floatMul);
     p0.toString();   
     std::cout << "Multiplication factor: " << floatMul << std::endl;
-    p0*=floatMul; 
+    p0 *= floatMul; 
     p0.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -600,7 +600,7 @@ void part4()
     Point p1(ft2, ft2);
     p1.toString();   
     std::cout << "Multiplication factor: " << ft2 << std::endl;
-    p1*=ft2; 
+    p1 *= ft2; 
     p1.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -609,7 +609,7 @@ void part4()
     Point p2(ft2, static_cast<float>(dt2));
     p2.toString();   
     std::cout << "Multiplication factor: " << dt2 << std::endl;
-    p2*=dt2; 
+    p2 *= dt2; 
     p2.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -618,7 +618,7 @@ void part4()
     Point p3(ft2, static_cast<float>(dt2));
     p3.toString();   
     std::cout << "Multiplication factor: " << it2 << std::endl;
-    p3*=it2; 
+    p3 *= it2; 
     p3.toString();   
     std::cout << "---------------------\n" << std::endl;
     
