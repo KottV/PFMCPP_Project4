@@ -449,34 +449,34 @@ struct Point
     Point(const IntType& itx_, const IntType& ity_) : Point(static_cast<float>(static_cast<int>(itx_)), static_cast<float>(static_cast<int>(ity_))) {}
     Point(const DoubleType& dtx_, const DoubleType& dty_) : Point(static_cast<float>(static_cast<double>(dtx_)), static_cast<float>(static_cast<double>(dty_))) {}
     
-    Point& operator*=(float m);
-    Point& operator*=(FloatType& ftm);
-    Point& operator*=(DoubleType& dtm);
-    Point& operator*=(IntType& itm);
+    Point& operator*=(const float m);
+    Point& operator*=(const FloatType& ftm);
+    Point& operator*=(const DoubleType& dtm);
+    Point& operator*=(const IntType& itm);
 
     void toString();
 private:
     float x{ 0 }, y{ 0 };
 };
 
-Point& Point::operator*=(float m)
+Point& Point::operator*=(const float m)
 {
     x *= m;
     y *= m;
     return *this;
 }
 
-Point& Point::operator*=(FloatType& ftm)
+Point& Point::operator*=(const FloatType& ftm)
 {
     return *this *= (static_cast<float>(ftm));
 }
 
-Point& Point::operator*=(DoubleType& dtm)
+Point& Point::operator*=(const DoubleType& dtm)
 {
     return *this *= (static_cast<float>(dtm));
 }
 
-Point& Point::operator*=(IntType& itm)
+Point& Point::operator*=(const IntType& itm)
 {
     return *this *= (static_cast<float>(itm));
 }
