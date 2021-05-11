@@ -449,36 +449,36 @@ struct Point
     Point(const IntType& itx_, const IntType& ity_) : Point(static_cast<float>(static_cast<int>(itx_)), static_cast<float>(static_cast<int>(ity_))) {}
     Point(const DoubleType& dtx_, const DoubleType& dty_) : Point(static_cast<float>(static_cast<double>(dtx_)), static_cast<float>(static_cast<double>(dty_))) {}
     
-    Point& operator*=(float m);
-    Point& operator*=(FloatType& ftm);
-    Point& operator*=(DoubleType& dtm);
-    Point& operator*=(IntType& itm);
+    Point& multiply(float m);
+    Point& multiply(FloatType& ftm);
+    Point& multiply(DoubleType& dtm);
+    Point& multiply(IntType& itm);
 
     void toString();
 private:
     float x{ 0 }, y{ 0 };
 };
 
-Point& Point::operator*=(float m)
+Point& Point::multiply(float m)
 {
     x *= m;
     y *= m;
     return *this;
 }
 
-Point& Point::operator*=(FloatType& ftm)
+Point& Point::multiply(FloatType& ftm)
 {
-    return *this *= (static_cast<float>(ftm));
+    return multiply(static_cast<float>(ftm));
 }
 
-Point& Point::operator*=(DoubleType& dtm)
+Point& Point::multiply(DoubleType& dtm)
 {
-    return *this *= (static_cast<float>(dtm));
+    return multiply(static_cast<float>(dtm));
 }
 
-Point& Point::operator*=(IntType& itm)
+Point& Point::multiply(IntType& itm)
 {
-    return *this *= (static_cast<float>(itm));
+    return multiply(static_cast<float>(itm));
 }
 
 void Point::toString()
@@ -591,7 +591,7 @@ void part4()
     Point p0(ft2, floatMul);
     p0.toString();   
     std::cout << "Multiplication factor: " << floatMul << std::endl;
-    p0 *= floatMul; 
+    p0.multiply(floatMul); 
     p0.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -600,7 +600,7 @@ void part4()
     Point p1(ft2, ft2);
     p1.toString();   
     std::cout << "Multiplication factor: " << ft2 << std::endl;
-    p1 *= ft2; 
+    p1.multiply(ft2); 
     p1.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -609,7 +609,7 @@ void part4()
     Point p2(ft2, static_cast<float>(dt2));
     p2.toString();   
     std::cout << "Multiplication factor: " << dt2 << std::endl;
-    p2 *= dt2; 
+    p2.multiply(dt2); 
     p2.toString();   
     std::cout << "---------------------\n" << std::endl;
 
@@ -618,7 +618,7 @@ void part4()
     Point p3(ft2, static_cast<float>(dt2));
     p3.toString();   
     std::cout << "Multiplication factor: " << it2 << std::endl;
-    p3 *= it2; 
+    p3.multiply(it2); 
     p3.toString();   
     std::cout << "---------------------\n" << std::endl;
     
