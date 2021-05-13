@@ -42,7 +42,7 @@ build/run to make sure you don't have any errors
  
  If you need to see an example, look at https://bitbucket.org/MatkatMusic/pfmcpptasks/src/master/Projects/Project4/Part6Example.cpp
  */
-
+/*
 void part6()
 {
     FloatType ft3(3.0f);
@@ -79,7 +79,7 @@ void part6()
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-
+*/
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings.
@@ -208,7 +208,7 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 
 #include <iostream>
 #include <math.h>
-
+#include <functional>
 
 struct FloatType;
 struct DoubleType;
@@ -242,6 +242,17 @@ struct IntType
     IntType& pow(const FloatType&);
     IntType& pow(const DoubleType&);
     IntType& pow(int);
+    
+    IntType& apply(std::function<IntType&(int&)> IntPtr)
+    {
+        return *this;
+    }
+    
+    IntType& apply(void(*IntPtr)(int&))
+    {
+        return *this;
+    }
+    
     
 private:
     int* value;
