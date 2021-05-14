@@ -246,6 +246,24 @@ struct DoubleType
     DoubleType& pow(const DoubleType&);
     DoubleType& pow(double);
 
+    DoubleType& apply(std::function<DoubleType& (double&)> DoubleFptr)
+    {
+        if (DoubleFptr)
+        {
+            return DoubleFptr(*value);
+        }
+        return *this;
+    }
+
+    DoubleType& apply(void(*DoubleFptr)(double&))
+    {
+        if (DoubleFptr)
+        {
+            DoubleFptr(*value);
+        }
+        return *this;
+    }
+
 private:
     double* value;
     DoubleType& powInternal(double rhs);
@@ -385,11 +403,19 @@ DoubleType& DoubleType::operator/=(const double& other)
     return *this;
 }
 
-void add5(std::unique_ptr<int>& val)
+void add5(std::unique_ptr<int> &val)
 {
     {
         int& i = *val;
         i += 5;
+    }
+}
+
+void add6(double &val)
+{
+    {
+        double& f = val;
+        f += 5;
     }
 }
 
@@ -674,20 +700,20 @@ void part6()
     ft3.apply(myFloatFreeFunct);
     std::cout << "ft3 after: " << ft3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
-
+*/
     std::cout << "Calling DoubleType::apply() using a lambda (adds 6.0) and DoubleType as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
-    dt3.apply([]() {});
+    dt3.apply([&](double) -> DoubleType& { return dt3 += 5.0;  });
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "Calling DoubleType::apply() using a free function (adds 6.0) and void as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
-    dt3.apply(myDoubleFreeFunct);
+    dt3.apply(add6);
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
-*/
+
     std::cout << "Calling IntType::apply() using a lambda (adds 5) and IntType as return type:" << std::endl;
     std::cout << "it3 before: " << it3 << std::endl;
-    it3.apply( [&](std::unique_ptr<int>& ui) -> IntType& { return it3 += 5; });
+    it3.apply( [&](std::unique_ptr<int>&) -> IntType& { return it3 += 5; });
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "Calling IntType::apply() using a free function (adds 5) and void as return type:" << std::endl;
     std::cout << "it3 before: " << it3 << std::endl;
