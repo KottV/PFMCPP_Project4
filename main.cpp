@@ -284,6 +284,23 @@ struct FloatType
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
 
+    FloatType& apply(std::function<FloatType& (float&)> FloatFptr)
+    {
+        if (FloatFptr)
+        {
+            return FloatFptr(*value);
+        }
+        return *this;
+    }
+
+    FloatType& apply(void(*FloatFptr)(float&))
+    {
+        if (FloatFptr)
+        {
+            FloatFptr(*value);
+        }
+        return *this;
+    }
 private:
     float* value;
     FloatType& powInternal(float rhs);
@@ -401,6 +418,14 @@ DoubleType& DoubleType::operator/=(const double& other)
         std::cout << "warning: floating point division by zero!" << std::endl;
     *value = *value / other;
     return *this;
+}
+
+void add7(float& val)
+{
+    {
+        //int& i = *val;
+        val += 7.0f;
+    }
 }
 
 void add5(std::unique_ptr<int>& val)
@@ -690,20 +715,20 @@ void part6()
     FloatType ft3(3.0f);
     DoubleType dt3(4.0);
     IntType it3(5);
-/*
+
     std::cout << "Calling FloatType::apply() using a lambda (adds 7.0f) and FloatType as return type:" << std::endl;
     std::cout << "ft3 before: " << ft3 << std::endl;
-    ft3.apply([]() {});
+    ft3.apply([&](float&) -> FloatType& { return ft3 += 7.0f;  });
     std::cout << "ft3 after: " << ft3 << std::endl;
     std::cout << "Calling FloatType::apply() using a free function (adds 7.0f) and void as return type:" << std::endl;
     std::cout << "ft3 before: " << ft3 << std::endl;
-    ft3.apply(myFloatFreeFunct);
+    ft3.apply(add7);
     std::cout << "ft3 after: " << ft3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
-*/
+
     std::cout << "Calling DoubleType::apply() using a lambda (adds 6.0) and DoubleType as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
-    dt3.apply([&](double) -> DoubleType& { return dt3 += 6.0;  });
+    dt3.apply([&](double&) -> DoubleType& { return dt3 += 6.0;  });
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "Calling DoubleType::apply() using a free function (adds 6.0) and void as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
