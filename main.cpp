@@ -171,6 +171,7 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 #include <iostream>
 #include <math.h>
 #include <functional>
+#include <memory>
 
 struct FloatType;
 struct DoubleType;
