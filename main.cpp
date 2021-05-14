@@ -403,19 +403,19 @@ DoubleType& DoubleType::operator/=(const double& other)
     return *this;
 }
 
-void add5(std::unique_ptr<int> &val)
+void add5(std::unique_ptr<int>& val)
 {
     {
-        int& i = *val;
-        i += 5;
+        //int& i = *val;
+        *val += 5;
     }
 }
 
 void add6(double &val)
 {
     {
-        double& f = val;
-        f += 5;
+        //double& f = val;
+        val += 6;
     }
 }
 
@@ -703,7 +703,7 @@ void part6()
 */
     std::cout << "Calling DoubleType::apply() using a lambda (adds 6.0) and DoubleType as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
-    dt3.apply([&](double) -> DoubleType& { return dt3 += 5.0;  });
+    dt3.apply([&](double) -> DoubleType& { return dt3 += 6.0;  });
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "Calling DoubleType::apply() using a free function (adds 6.0) and void as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
