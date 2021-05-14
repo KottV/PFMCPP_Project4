@@ -206,20 +206,20 @@ struct IntType
     IntType& pow(const DoubleType&);
     IntType& pow(int);
     
-    IntType& apply(std::function<IntType&(std::unique_ptr<int>&)> IntFptr)
+    IntType& apply(std::function<IntType&(std::unique_ptr<int>&)> intFptr)
     {
-        if (IntFptr)
+        if (intFptr)
         {
-            return IntFptr(value);
+            return intFptr(value);
         }
         return *this;
     }
     
-    IntType& apply(void(*IntFptr)(std::unique_ptr<int>&))
+    IntType& apply(void(*intFptr)(std::unique_ptr<int>&))
     {
-        if (IntFptr)
+        if (intFptr)
         {
-            IntFptr(value);
+            intFptr(value);
         }
         return *this;
     }
@@ -246,20 +246,20 @@ struct DoubleType
     DoubleType& pow(const DoubleType&);
     DoubleType& pow(double);
 
-    DoubleType& apply(std::function<DoubleType& (double&)> DoubleFptr)
+    DoubleType& apply(std::function<DoubleType& (double&)> doubleFptr)
     {
-        if (DoubleFptr)
+        if (doubleFptr)
         {
-            return DoubleFptr(*value);
+            return doubleFptr(*value);
         }
         return *this;
     }
 
-    DoubleType& apply(void(*DoubleFptr)(double&))
+    DoubleType& apply(void(*doubleFptr)(double&))
     {
-        if (DoubleFptr)
+        if (doubleFptr)
         {
-            DoubleFptr(*value);
+            doubleFptr(*value);
         }
         return *this;
     }
@@ -284,20 +284,20 @@ struct FloatType
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
 
-    FloatType& apply(std::function<FloatType& (float&)> FloatFptr)
+    FloatType& apply(std::function<FloatType& (float&)> floatFptr)
     {
-        if (FloatFptr)
+        if (floatFptr)
         {
-            return FloatFptr(*value);
+            return floatFptr(*value);
         }
         return *this;
     }
 
-    FloatType& apply(void(*FloatFptr)(float&))
+    FloatType& apply(void(*floatFptr)(float&))
     {
-        if (FloatFptr)
+        if (floatFptr)
         {
-            FloatFptr(*value);
+            floatFptr(*value);
         }
         return *this;
     }
