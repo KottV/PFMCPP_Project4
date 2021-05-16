@@ -1,5 +1,8 @@
-
 #include <iostream>
+#include <math.h>
+#include <functional>
+#include <memory>
+
 /*
 Project 4: Part 7 / 9
 Video: Chapter 5 Part 4
@@ -78,7 +81,7 @@ Templates and Containers
 
 If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptasks/src/master/Projects/Project4/Part7Example.cpp
 */
-
+/*
 void part7()
 {
     Numeric ft3(3.0f);
@@ -129,7 +132,7 @@ void part7()
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-
+*/
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings. 
@@ -256,11 +259,6 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 */
 
 
-#include <iostream>
-#include <math.h>
-#include <functional>
-#include <memory>
-
 struct FloatType;
 struct DoubleType;
 struct IntType;
@@ -334,26 +332,26 @@ struct DoubleType
     DoubleType& pow(const DoubleType&);
     DoubleType& pow(double);
 
-    DoubleType& apply(std::function<DoubleType& (double&)> doubleFptr)
+    DoubleType& apply(std::function<DoubleType& (std::unique_ptr<double>&)> doubleFptr)
     {
         if (doubleFptr)
         {
-            return doubleFptr(*value);
+            return doubleFptr(value);
         }
         return *this;
     }
 
-    DoubleType& apply(void(*doubleFptr)(double&))
+    DoubleType& apply(void(*doubleFptr)(std::unique_ptr<double>&))
     {
         if (doubleFptr)
         {
-            doubleFptr(*value);
+            doubleFptr(value);
         }
         return *this;
     }
 
 private:
-    double* value;
+    std::unique_ptr<double> value;
     DoubleType& powInternal(double rhs);
 };
 
@@ -372,25 +370,25 @@ struct FloatType
     FloatType& pow(const DoubleType&);
     FloatType& pow(float);
 
-    FloatType& apply(std::function<FloatType& (float&)> floatFptr)
+    FloatType& apply(std::function<FloatType& (std::unique_ptr<float>&)> floatFptr)
     {
         if (floatFptr)
         {
-            return floatFptr(*value);
+            return floatFptr(value);
         }
         return *this;
     }
 
-    FloatType& apply(void(*floatFptr)(float&))
+    FloatType& apply(void(*floatFptr)(std::unique_ptr<float>&))
     {
         if (floatFptr)
         {
-            floatFptr(*value);
+            floatFptr(value);
         }
         return *this;
     }
 private:
-    float* value;
+    std::unique_ptr<float> value;
     FloatType& powInternal(float rhs);
 
 };
@@ -448,12 +446,9 @@ FloatType& FloatType::pow(float f_)
     return powInternal(f_);
 }
 
-FloatType::FloatType(float f_) : value(new float(f_)) {}
+FloatType::FloatType(float f_) : value(std::make_unique<float>(f_)) {}
 
-FloatType::~FloatType()
-{
-    delete value;
-}
+FloatType::~FloatType(){}
 
 FloatType::operator float() const
 {
@@ -471,10 +466,10 @@ IntType::operator int () const
     return *value;
 }
 
-DoubleType::DoubleType(double d_) : value(new double (d_)) {}
+DoubleType::DoubleType(double d_) : value(std::make_unique<double>(d_)) {}
 DoubleType::~DoubleType()
 {
-    delete value;
+    //delete value;
 }
 
 DoubleType::operator double () const
@@ -508,27 +503,24 @@ DoubleType& DoubleType::operator/=(const double& other)
     return *this;
 }
 
-void add7(float& val)
+void add7(std::unique_ptr<float>& val)
 {
     {
-        //int& i = *val;
-        val += 7.0f;
+        *val += 7.0f;
     }
 }
 
 void add5(std::unique_ptr<int>& val)
 {
     {
-        //int& i = *val;
         *val += 5;
     }
 }
 
-void add6(double &val)
+void add6(std::unique_ptr<double>& val)
 {
     {
-        //double& f = val;
-        val += 6;
+        *val += 6;
     }
 }
 
@@ -797,7 +789,7 @@ void part4()
     std::cout << "---------------------\n" << std::endl;
     
 }
-
+/*
 void part6()
 {
     FloatType ft3(3.0f);
@@ -834,7 +826,7 @@ void part6()
     std::cout << "it3 after: " << it3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
 }
-
+*/
 int main()
 {
     //testing instruction 0
@@ -921,7 +913,7 @@ int main()
 
     part3();
     part4();
-    part6();
+    //part6();
 
     std::cout << "good to go!\n";
 
