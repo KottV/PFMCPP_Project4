@@ -258,11 +258,6 @@ good to go!
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
 
-
-struct FloatType;
-struct DoubleType;
-struct IntType;
-
 struct A {};
 
 struct HeapA
@@ -351,29 +346,37 @@ public:
     operator Type() const { return *value; }
 };
 
-
-struct DoubleType
+template<>
+struct Numeric<double>
 {
-    DoubleType(double d_);
-    ~DoubleType();
-    operator double () const;
+    using Type = double;
     
-    DoubleType& operator+=(const double& other)
+    Numeric(Type d_) : value(std::make_unique<Type>(d_)) {}
+    
+    operator Type () const
+    {
+        return *value;
+    }
+    
+    Numeric& operator+=(const Type& other)
     {
         *value += other;
         return *this;
     }
-    DoubleType& operator-=(const double& other)
+
+    Numeric& operator-=(const Type& other)
     {
         *value -= other;
         return *this;
     }
-    DoubleType& operator*=(const double& other)
+    
+    Numeric& operator*=(const Type& other)
     {
         *value *= other;
         return *this;
     }
-    DoubleType& operator/=(const double& other)
+    Numeric& operator/=(const Type& other)
+    
     {
         if (other == 0.0)
             std::cout << "warning: floating point division by zero!" << std::endl;
@@ -381,16 +384,12 @@ struct DoubleType
         return *this;
     }
 
-    DoubleType& pow(const DoubleType& dt)
+    Numeric& pow(const Type& dt)
     {
         return powInternal(static_cast<double>(dt));
-     }
-    DoubleType& pow(double d_)
-    {
-        return powInternal(static_cast<double>(d_));
     }
 
-    DoubleType& apply(std::function<DoubleType& (std::unique_ptr<double>&)> doubleFptr)
+    Numeric& apply(std::function<Numeric& (std::unique_ptr<Type>&)> doubleFptr)
     {
         if (doubleFptr)
         {
@@ -399,7 +398,15 @@ struct DoubleType
         return *this;
     }
 
-    DoubleType& apply(void(*doubleFptr)(std::unique_ptr<double>&))
+    template<typename Callable>                         // #7)
+    Numeric& apply(Callable&& f)
+    {
+        f(value);
+
+        return *this;
+    }
+
+    Numeric& apply(void(*doubleFptr)(std::unique_ptr<Type>&))
     {
         if (doubleFptr)
         {
@@ -409,26 +416,14 @@ struct DoubleType
     }
 
 private:
-    std::unique_ptr<double> value;
-    DoubleType& powInternal(double rhs)
+    std::unique_ptr<Type> value;
+
+    Numeric& powInternal(Type rhs)
     {
         *value = std::pow(*value, rhs);
         return *this;
     }
 };
-
-
-
-DoubleType::DoubleType(double d_) : value(std::make_unique<double>(d_)) {}
-DoubleType::~DoubleType()
-{
-    //delete value;
-}
-
-DoubleType::operator double () const
-{
-    return *value;
-}
 
 void add7(std::unique_ptr<float>& val)
 {
@@ -454,7 +449,7 @@ void add6(std::unique_ptr<double>& val)
 struct Point
 {
     template<typename Type1, typename Type2>
-    //Point(const float& fx_, const float& fy_) : x(fx_), y(fy_) {}
+    
     Point(const Type1& tx_, const Type2& ty_) : x(tx_), y(ty_) {}
     
     Point& multiply(float m)
