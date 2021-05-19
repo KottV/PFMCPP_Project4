@@ -619,11 +619,11 @@ void part7()
     std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
     std::cout << "ft3 before: " << ft3 << std::endl;
 
-    
+    {
         using Type = decltype(ft3)::Type;
         using ReturnType = decltype(ft3);
         ft3.apply([&](std::unique_ptr<Type>&) -> ReturnType& { return ft3 += 7; });
-    
+    }
     
     std::cout << "ft3 after: " << ft3 << std::endl;
     std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
@@ -751,9 +751,9 @@ int main()
     std::cout << "---------------------\n" << std::endl;
 
     part3();
-    //part4();
+    part4();
     //part6();
-    //part7();
+    part7();
     
 /*
     Numeric<int> it1(8);
