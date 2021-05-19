@@ -355,21 +355,10 @@ struct Numeric<double>
         return powInternal(static_cast<double>(dt));
     }
 
-    Numeric& apply(std::function<Numeric& (std::unique_ptr<Type>&)> doubleFptr)
+    template<typename Callable>
+    Numeric& apply(Callable&& doubleFptr)
     {
-        if (doubleFptr)
-        {
-            return doubleFptr(value);
-        }
-        return *this;
-    }
-
-    Numeric& apply(void(*doubleFptr)(std::unique_ptr<Type>&))
-    {
-        if (doubleFptr)
-        {
-            doubleFptr(value);
-        }
+        doubleFptr(value);
         return *this;
     }
 
