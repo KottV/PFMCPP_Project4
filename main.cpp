@@ -3,6 +3,7 @@
 #include <functional>
 #include <memory>
 #include <type_traits>
+#include <limits>
 
 /*
 Project 4: Part 7 / 9
@@ -255,25 +256,27 @@ public:
     {
         if (std::is_same_v<Type, int>)
         {
-//            std::cout << "divider is int type" << std::endl;
             if (std::is_same_v<decltype(other), const int&>)
                  {
-                      std::cout << "divider is int type" << std::endl;
                      if (other == 0)
                      {
                          std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+                         return *this;
                      }
                  }
-            else
-                {
-                    *value /= other;
-                }
-        }
-        else
-        {
+            else if (other < std::numeric_limits<Type>::epsilon())
+            {
+                std::cout << "can't divide integers by zero!" << std::endl;
+                return *this;
+            }
 
-            *value /= other;
         }
+        if (other < std::numeric_limits<float>::epsilon())
+        {
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        }
+
+        *value /= other;
         return *this;
     }
 
