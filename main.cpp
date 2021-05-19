@@ -252,11 +252,12 @@ public:
         return *this;
     }
 
-    Numeric& operator/=(const Type& other)
+    template<typename TypeOther>
+    Numeric& operator/=(const TypeOther& other)
     {
-        if (std::is_same_v<Type, int>)
+        if constexpr (std::is_same_v<Type, int>)
         {
-            if (std::is_same_v<decltype(other), const int&>)
+            if constexpr (std::is_same_v<TypeOther, int>)
                  {
                      if (other == 0)
                      {
@@ -264,14 +265,14 @@ public:
                          return *this;
                      }
                  }
-            else if (other < std::numeric_limits<Type>::epsilon())
+            else if (other < std::numeric_limits<TypeOther>::epsilon())
             {
                 std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
             }
 
         }
-        if (other < std::numeric_limits<float>::epsilon())
+        if (other < std::numeric_limits<Type>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
@@ -279,7 +280,7 @@ public:
         *value /= other;
         return *this;
     }
-
+    
     Numeric& powInternal(Type rhs)
     {
         *value = std::pow(*value, rhs);
