@@ -272,7 +272,7 @@ public:
             }
             
         }
-        if (other < std::numeric_limits<Type>::epsilon())
+        else if (other < std::numeric_limits<Type>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
@@ -399,7 +399,6 @@ void add6(std::unique_ptr<NumericType>& val)
 struct Point
 {
     template<typename Type1, typename Type2>
-    
     Point(const Type1& tx_, const Type2& ty_) : x(tx_), y(ty_) {}
     
     Point& multiply(float m)
@@ -410,7 +409,7 @@ struct Point
     }
     
     template<typename Type>
-    Point& multiply(Type& rhs)
+    Point& multiply(const Type& rhs)
     {
         return multiply(static_cast<float>(rhs));
     }
