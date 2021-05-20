@@ -215,9 +215,9 @@ struct A {};
 struct HeapA
 {
     A* ptrA = nullptr;
-
+    
     HeapA() : ptrA(new A()) {}
-
+    
     ~HeapA()
     {
         delete ptrA;
@@ -233,50 +233,50 @@ private:
     std::unique_ptr<Type> value;
 public:
     explicit Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
-
+    
     Numeric& operator+=(const Type& other)
     {
         *value += other;
         return *this;
     }
-
+    
     Numeric& operator-=(const Type& other)
     {
         *value -= other;
         return *this;
     }
-
+    
     Numeric& operator*=(const Type& other)
     {
         *value *= other;
         return *this;
     }
-
+    
     template<typename TypeOther>
     Numeric& operator/=(const TypeOther& other)
     {
         if constexpr (std::is_same_v<Type, int>)
         {
             if constexpr (std::is_same_v<TypeOther, int>)
-                 {
-                     if (other == 0)
-                     {
-                         std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-                         return *this;
-                     }
-                 }
+            {
+                if (other == 0)
+                {
+                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+                    return *this;
+                }
+            }
             else if (other < std::numeric_limits<TypeOther>::epsilon())
             {
                 std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
             }
-
+            
         }
         if (other < std::numeric_limits<Type>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
-
+        
         *value /= other;
         return *this;
     }
@@ -286,12 +286,12 @@ public:
         *value = static_cast<Type>(std::pow(*value, rhs));
         return *this;
     }
-
+    
     Numeric& pow(const Type& exp)
     {
         return powInternal(exp);
     }
-
+    
     Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
     {
         if ( f )
@@ -300,15 +300,15 @@ public:
         }
         return *this;
     }
-
-        Numeric& apply( void(*f)(std::unique_ptr<Type>&) )
+    
+    Numeric& apply( void(*f)(std::unique_ptr<Type>&) )
     {
         if( f )
             f(value);
-
+        
         return *this;
     }
-
+    
     operator Type() const { return *value; }
 };
 
@@ -329,7 +329,7 @@ struct Numeric<double>
         *value += other;
         return *this;
     }
-
+    
     Numeric& operator-=(const Type& other)
     {
         *value -= other;
@@ -349,22 +349,22 @@ struct Numeric<double>
         *value = *value / other;
         return *this;
     }
-
+    
     Numeric& pow(const Type& dt)
     {
         return powInternal(static_cast<double>(dt));
     }
-
+    
     template<typename Callable>
     Numeric& apply(Callable&& doubleFptr)
     {
         doubleFptr(value);
         return *this;
     }
-
+    
 private:
     std::unique_ptr<Type> value;
-
+    
     Numeric& powInternal(Type rhs)
     {
         *value = std::pow(*value, rhs);
@@ -408,7 +408,7 @@ struct Point
         y *= m;
         return *this;
     }
-
+    
     template<typename Type>
     Point& multiply(Type& rhs)
     {
@@ -474,7 +474,7 @@ void part3()
     it += static_cast<int>(ft);
     it *= 24;
     std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it << std::endl;
-
+    
 }
 void part4()
 {
@@ -604,10 +604,10 @@ void part7()
     Numeric<float> ft3(3.0f);
     Numeric<double> dt3(4.0);
     Numeric<int> it3(5);
-
+    
     std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
     std::cout << "ft3 before: " << ft3 << std::endl;
-
+    
     {
         using Type = decltype(ft3)::Type;
         using ReturnType = decltype(ft3);
@@ -620,26 +620,26 @@ void part7()
     ft3.apply(add7).apply(add7);
     std::cout << "ft3 after: " << ft3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
-
+    
     std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
-
+    
     {
         using Type = decltype(dt3)::Type;
         using ReturnType = decltype(dt3);
         dt3.apply( [&](std::unique_ptr<Type>&)->ReturnType& { return dt3 += 6;} ); // This calls the templated apply fcn
     }
-
+    
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
     std::cout << "dt3 before: " << dt3 << std::endl;
     dt3.apply(add7<double>).apply(add7<double>); // This calls the templated apply fcn
     std::cout << "dt3 after: " << dt3 << std::endl;
     std::cout << "---------------------\n" << std::endl;
-
+    
     std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
     std::cout << "it3 before: " << it3 << std::endl;
-
+    
     {
         using Type = decltype(it3)::Type;
         using ReturnType = decltype(it3);
