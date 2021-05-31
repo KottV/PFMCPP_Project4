@@ -43,7 +43,7 @@ struct Temporary
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
      */
-    operator NumericType() const { return v;  }
+    operator NumericType() const { return v; }
     operator NumericType&() { return v; }
 private:
     static int counter;
@@ -60,6 +60,7 @@ private:
  3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
     use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
  */
+/* 
 namespace example
 {
 template<typename NumericType>
@@ -75,7 +76,7 @@ struct Numeric
     //snip
 };
 }
-
+*/
 /*
  4) remove your specialized <double> template of your Numeric<T> class from the previous task (ch5 p04)
     replace the 2 apply() functions in your Numeric<T> with the single templated apply() function from the specialized <double> template.
@@ -159,8 +160,8 @@ private:
 public:
     Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
 
-    operator NumericType() const { return *value }
-    operator NumericType&() const { return *value }
+    operator NumericType() const { return *value; }
+    operator NumericType&() const { return *value; }
 
     template<typename OtherType>
     Numeric& operator=(const OtherType& o)
@@ -343,7 +344,8 @@ void add6(std::unique_ptr<NumericType>& val)
 template<typename NumericType>
 Numeric<NumericType> cube()
 {
-    return *this * (*this) * (*this);
+    *value = pow(*value, 3);
+    return *this;
 }
 
 struct Point
