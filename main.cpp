@@ -4,6 +4,7 @@
 #include <memory>
 #include <type_traits>
 #include <limits>
+#include <typeinfo>
 
 /*
 Prject 4: Part 8 / 9
@@ -30,7 +31,7 @@ Create a branch named Part8
  1) Here is a starting point for how to implement your Temporary struct.
  */
 
-#include <typeinfo>
+
 template<typename NumericType>
 struct Temporary
 {
@@ -166,7 +167,8 @@ public:
     template<typename OtherType>
     Numeric& operator=(const OtherType& o)
     {
-        return static_cast<NumericType>(o);
+        *value = static_cast<NumericType>(o);
+        return *this;
     }
 
     template<typename OtherType>
