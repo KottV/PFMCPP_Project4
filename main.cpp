@@ -163,6 +163,14 @@ public:
     Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
 
     template<typename OtherType>
+    Numeric& operator=(const OtherType& other)
+    {
+        //*value += static_cast<NumericType>(other);
+        *value = static_cast<NumericType>(other);
+        return *this;
+    }    
+    
+    template<typename OtherType>
     Numeric& operator+=(const OtherType& other)
     {
         *value += static_cast<NumericType>(other);
@@ -258,7 +266,7 @@ void add6(std::unique_ptr<NumericType>& val)
 template<typename NumericType>
 void cube(std::unique_ptr<NumericType>& val)
 {
-    *val = pow(*val, 3);
+    *val = *val * (*val) * (*val);
 }
 
 struct Point
@@ -557,7 +565,7 @@ int main()
     Numeric<float> floatNum(4.3f);
     Numeric<int> intNum(2);
     Numeric<int> intNum2(6);
-//    intNum = 2 + (intNum2 - 4) + static_cast<double>(floatNum) / 2.3;
+    intNum = 2 + (intNum2 - 4) + static_cast<double>(floatNum) / 2.3;
     std::cout << "intNum: " << intNum << std::endl;
 
     {
@@ -570,7 +578,7 @@ int main()
             });
         std::cout << "f squared: " << f << std::endl;
 
-//        f.apply(cube<Type>);
+        f.apply(cube<Type>);
         std::cout << "f cubed: " << f << std::endl;
     }
 
@@ -584,7 +592,7 @@ int main()
             });
         std::cout << "d squared: " << d << std::endl;
 
-//        d.apply(cube<Type>);
+        d.apply(cube<Type>);
         std::cout << "d cubed: " << d << std::endl;
     }
 
@@ -598,7 +606,7 @@ int main()
             });
         std::cout << "i squared: " << i << std::endl;
 
- //       i.apply(cube<Type>);
+        i.apply(cube<Type>);
         std::cout << "i cubed: " << i << std::endl;
     }
 }
