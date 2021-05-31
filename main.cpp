@@ -56,6 +56,8 @@ private:
     Remember the rules about how to define a Template member variable/function outside of the class.
 */
 
+template<typename NumericType>
+int Temporary<NumericType>::counter = 0;
 
 /*
  3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
@@ -152,7 +154,6 @@ struct HeapA
 };
 
 template<typename NumericType>
-
 struct Numeric
 {
     using Type = Temporary<NumericType>;
@@ -161,33 +162,24 @@ private:
 public:
     Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
 
-    operator NumericType() const { return *value; }
-    operator NumericType&() const { return *value; }
-
-    template<typename OtherType>
-    Numeric& operator=(const OtherType& o)
-    {
-        *value = static_cast<NumericType>(o);
-        return *this;
-    }
-
     template<typename OtherType>
     Numeric& operator+=(const OtherType& other)
     {
-        *value += other;
+        *value += static_cast<NumericType>(other);
         return *this;
     }
     
     template<typename OtherType>
     Numeric& operator-=(const OtherType& other)
     {
-        *value -= other;
+        *value -= static_cast<NumericType>(other);
         return *this;
     }
+    
     template<typename OtherType>
     Numeric& operator*=(const OtherType& other)
     {
-        *value *= other;
+        *value *= static_cast<NumericType>(other);
         return *this;
     }
     
@@ -211,44 +203,22 @@ public:
             }
             
         }
-        else if (other < std::numeric_limits<Type>::epsilon())
-        {
-            std::cout << "warning: floating point division by zero!" << std::endl;
-        }
+         else if (static_cast<NumericType>(other) < std::numeric_limits<NumericType>::epsilon())
+         {
+             std::cout << "warning: floating point division by zero!" << std::endl;
+         }
         
-        *value /= other;
+        *value /= static_cast<NumericType>(other);
         return *this;
     }
-    /*
-    Numeric& powInternal(Type rhs)
-    {
-        *value = static_cast<Type>(std::pow(*value, rhs));
-        return *this;
-    }
-    */
+
     template<typename OtherType>
     Numeric& pow(const OtherType& exp)
     {
-        return static_cast<Type>(pow(*value, exp));
+        *value = static_cast<NumericType>(std::pow(*value, static_cast<NumericType>(exp)));
+        return *this;
     }
     
-    //Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
-    //{
-    //    if ( f )
-    //    {
-    //        return f( value );
-    //    }
-    //    return *this;
-    //}
-    //
-    //Numeric& apply( void(*f)(std::unique_ptr<Type>&) )
-    //{
-    //    if( f )
-    //        f(value);
-    //    
-    //    return *this;
-    //}
-
     template<typename Callable>
     Numeric& apply(Callable&& Fptr)
     {
@@ -256,69 +226,11 @@ public:
         return *this;
     }
 
-    operator Type() const { return *value; }
+    operator NumericType() const { return *value; }
+    operator NumericType&() { return *value; }
+    
 };
-/*
-template<>
-struct Numeric<double>
-{
-    using Type = double;
-    
-    explicit Numeric(Type d_) : value(std::make_unique<Type>(d_)) {}
-    
-    operator Type () const
-    {
-        return *value;
-    }
-    
-    Numeric& operator+=(const Type& other)
-    {
-        *value += other;
-        return *this;
-    }
-    
-    Numeric& operator-=(const Type& other)
-    {
-        *value -= other;
-        return *this;
-    }
-    
-    Numeric& operator*=(const Type& other)
-    {
-        *value *= other;
-        return *this;
-    }
-    Numeric& operator/=(const Type& other)
-    
-    {
-        if (other == 0.0)
-            std::cout << "warning: floating point division by zero!" << std::endl;
-        *value = *value / other;
-        return *this;
-    }
-    
-    Numeric& pow(const Type& dt)
-    {
-        return powInternal(static_cast<double>(dt));
-    }
-    
-    template<typename Callable>
-    Numeric& apply(Callable&& doubleFptr)
-    {
-        doubleFptr(value);
-        return *this;
-    }
-    
-private:
-    std::unique_ptr<Type> value;
-    
-    Numeric& powInternal(Type rhs)
-    {
-        *value = std::pow(*value, rhs);
-        return *this;
-    }
-};
-*/
+
 template<typename NumericType>
 void add7(std::unique_ptr<NumericType>& val)
 {
@@ -388,7 +300,7 @@ private:
 
  Wait for my code review.
  */
-/*
+
 void part3()
 {
     Numeric<float> ft(5.5f);
@@ -428,7 +340,7 @@ void part3()
     std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it << std::endl;
     
 }
-*/
+
 /*
 void part4()
 {
