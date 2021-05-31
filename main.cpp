@@ -342,10 +342,9 @@ void add6(std::unique_ptr<NumericType>& val)
 }
 
 template<typename NumericType>
-Numeric<NumericType> cube()
+void cube(std::unique_ptr<NumericType>& val)
 {
-    *value = pow(*value, 3);
-    return *this;
+    *val = pow(*val, 3);
 }
 
 struct Point
