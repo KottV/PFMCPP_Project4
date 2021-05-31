@@ -44,7 +44,7 @@ struct Temporary
      hint: what qualifier do read-only functions usually have?
      */
     operator NumericType() const { return v;  }
-    operator NumericType() { return v; }
+    operator NumericType&() { return v; }
 private:
     static int counter;
     NumericType v;
@@ -157,32 +157,43 @@ struct Numeric
 private:
     std::unique_ptr<Type> value;
 public:
-    explicit Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
-    
-    Numeric& operator+=(const Type& other)
+    Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
+
+    operator NumericType() const { return *value }
+    operator NumericType&() const { return *value }
+
+    template<typename OtherType>
+    Numeric& operator=(const OtherType& o)
+    {
+        return static_cast<NumericType>(o);
+    }
+
+    template<typename OtherType>
+    Numeric& operator+=(const OtherType& other)
     {
         *value += other;
         return *this;
     }
     
-    Numeric& operator-=(const Type& other)
+    template<typename OtherType>
+    Numeric& operator-=(const OtherType& other)
     {
         *value -= other;
         return *this;
     }
-    
-    Numeric& operator*=(const Type& other)
+    template<typename OtherType>
+    Numeric& operator*=(const OtherType& other)
     {
         *value *= other;
         return *this;
     }
     
-    template<typename TypeOther>
-    Numeric& operator/=(const TypeOther& other)
+    template<typename OtherType>
+    Numeric& operator/=(const OtherType& other)
     {
         if constexpr (std::is_same_v<Type, int>)
         {
-            if constexpr (std::is_same_v<TypeOther, int>)
+            if constexpr (std::is_same_v<OtherType, int>)
             {
                 if (other == 0)
                 {
@@ -190,7 +201,7 @@ public:
                     return *this;
                 }
             }
-            else if (other < std::numeric_limits<TypeOther>::epsilon())
+            else if (other < std::numeric_limits<OtherType>::epsilon())
             {
                 std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
@@ -205,38 +216,46 @@ public:
         *value /= other;
         return *this;
     }
-    
+    /*
     Numeric& powInternal(Type rhs)
     {
         *value = static_cast<Type>(std::pow(*value, rhs));
         return *this;
     }
-    
-    Numeric& pow(const Type& exp)
+    */
+    template<typename OtherType>
+    Numeric& pow(const OtherType& exp)
     {
-        return powInternal(exp);
+        return static_cast<Type>(pow(*value, exp));
     }
     
-    Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
+    //Numeric& apply(std::function<Numeric&(std::unique_ptr<Type>&)> f)
+    //{
+    //    if ( f )
+    //    {
+    //        return f( value );
+    //    }
+    //    return *this;
+    //}
+    //
+    //Numeric& apply( void(*f)(std::unique_ptr<Type>&) )
+    //{
+    //    if( f )
+    //        f(value);
+    //    
+    //    return *this;
+    //}
+
+    template<typename Callable>
+    Numeric& apply(Callable&& Fptr)
     {
-        if ( f )
-        {
-            return f( value );
-        }
-        return *this;
-    }
-    
-    Numeric& apply( void(*f)(std::unique_ptr<Type>&) )
-    {
-        if( f )
-            f(value);
-        
+        Fptr(value);
         return *this;
     }
 
     operator Type() const { return *value; }
 };
-
+/*
 template<>
 struct Numeric<double>
 {
@@ -296,7 +315,7 @@ private:
         return *this;
     }
 };
-
+*/
 template<typename NumericType>
 void add7(std::unique_ptr<NumericType>& val)
 {
@@ -366,7 +385,7 @@ private:
 
  Wait for my code review.
  */
-
+/*
 void part3()
 {
     Numeric<float> ft(5.5f);
@@ -406,6 +425,8 @@ void part3()
     std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it << std::endl;
     
 }
+*/
+/*
 void part4()
 {
     // ------------------------------------------------------------
@@ -490,6 +511,7 @@ void part4()
     std::cout << "---------------------\n" << std::endl;
     
 }
+*/
 /*
 void part6()
 {
@@ -528,7 +550,7 @@ void part6()
     std::cout << "---------------------\n" << std::endl;
 }
 */
-
+/*
 void part7()
 {
     Numeric<float> ft3(3.0f);
@@ -583,7 +605,7 @@ void part7()
     std::cout << "---------------------\n" << std::endl;
     
 }
-
+*/
 
 int main()
 {
