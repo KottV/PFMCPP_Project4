@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <limits>
 #include <typeinfo>
+#include "LeakedObjectDetector.h"
 
 /*
 Project 4: Part 9 / 9
@@ -90,6 +91,7 @@ struct Temporary
 private:
     static int counter;
     NumericType v;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 template<typename NumericType>
@@ -195,7 +197,7 @@ public:
 
     operator NumericType() const { return *value; }
     operator NumericType&() { return *value; }
-    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 template<typename NumericType>
