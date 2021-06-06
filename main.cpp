@@ -90,19 +90,26 @@ struct Temporary
          std::cout << "I'm destructor" <<std::endl;
     }
     
-     Temporary& operator=(Temporary other) noexcept
+     Temporary& operator=(const Temporary& other)
      {
-         std::cout << "I'm assignment of: " << other << std::endl;
+         std::cout << "I'm copy assignment of: " << other << std::endl;
+         //std::swap(v, other.v);
+         return *this = other;
+     }
+
+     Temporary& operator=(Temporary&& other)
+     {
+         std::cout << "I'm move assignment of: " << other << std::endl;
          std::swap(v, other.v);
          return *this;
-     }  
-    
+     }
+
     operator NumericType() const { return v; }
     operator NumericType&() { return v; }
 private:
     static int counter;
     NumericType v;
-//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 template<typename NumericType>
