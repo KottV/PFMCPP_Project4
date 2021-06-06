@@ -76,33 +76,38 @@ struct Temporary
     Temporary(NumericType t) : v(t)
     {
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
-                  << counter++ << std::endl;
+        << counter++ << std::endl;
     }
     
-     Temporary(const Temporary& other) : v(other.v)
+    Temporary(const Temporary& other) : v(other.v)
     {
-         std::cout << "I'm copy constructor" <<std::endl;
-         
-    }
-     
-     ~Temporary()
-    {
-         std::cout << "I'm destructor" <<std::endl;
+        //std::cout << "I'm copy constructor" <<std::endl;
+        
     }
     
-     Temporary& operator=(const Temporary& other)
-     {
-         std::cout << "I'm copy assignment of: " << other << std::endl;
-         //std::swap(v, other.v);
-         return *this = other;
-     }
-
-     Temporary& operator=(Temporary&& other)
-     {
-         std::cout << "I'm move assignment of: " << other << std::endl;
-         std::swap(v, other.v);
-         return *this;
-     }
+    ~Temporary()
+    {
+        //std::cout << "I'm destructor" <<std::endl;
+    }
+    
+    Temporary& operator=(const Temporary& other)
+    {
+        //std::cout << "I'm copy assignment of: " << other.v << std::endl;
+        v = other.v;
+        return *this;
+    }
+    
+    Temporary(Temporary&& other) : v(std::move(other.v))
+    {
+        //std::cout << "I'm move constructor" <<std::endl;
+    }
+    
+    Temporary& operator=(Temporary&& other)
+    {
+        //std::cout << "I'm move assignment of: " << other.v << std::endl;
+        v = std::move(other.v);
+        return *this;
+    }
 
     operator NumericType() const { return v; }
     operator NumericType&() { return v; }
@@ -142,18 +147,25 @@ public:
     Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
     ~Numeric ()
     {
-        value = nullptr;
+        value.reset();
     }
     
-//    Numeric (const Numeric& other) : value(std::make_unique<Numeric>(other)) {}
+    Numeric (const Numeric& other) : value(std::make_unique<Numeric>(other.value)) {} //copy ctor
+    Numeric (Numeric&& other) : value(std::move(other.value)) {} //move ctor
 
+    template<typename OtherType>
+    Numeric& operator=(OtherType&& other) //move assignment
+    {
+         *value = std::move(static_cast<NumericType>(other));
+         return *this;
+    }
+    
     template<typename OtherType>
     Numeric& operator=(const OtherType& other)
     {
-        //*value += static_cast<NumericType>(other);
         *value = static_cast<NumericType>(other);
         return *this;
-    }    
+    }
     
     template<typename OtherType>
     Numeric& operator+=(const OtherType& other)
