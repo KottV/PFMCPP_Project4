@@ -22,14 +22,6 @@ Create a branch named Part9
  2) move these macros after the JUCE_LEAK_DETECTOR macro :
  */
 
-#define JUCE_DECLARE_NON_COPYABLE(className) \
-            className (const className&) = delete;\
-            className& operator= (const className&) = delete;
-
-#define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
-            JUCE_DECLARE_NON_COPYABLE(className) \
-            JUCE_LEAK_DETECTOR(className)
-
 /*
  3) add JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary) to the end of the  Temporary<> struct
  
@@ -86,12 +78,31 @@ struct Temporary
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
                   << counter++ << std::endl;
     }
+    
+     Temporary(const Temporary& other) : v(other.v)
+    {
+         std::cout << "I'm copy constructor" <<std::endl;
+         
+    }
+     
+     ~Temporary()
+    {
+         std::cout << "I'm destructor" <<std::endl;
+    }
+    
+     Temporary& operator=(Temporary other) noexcept
+     {
+         std::cout << "I'm assignment of: " << other << std::endl;
+         std::swap(v, other.v);
+         return *this;
+     }  
+    
     operator NumericType() const { return v; }
     operator NumericType&() { return v; }
 private:
     static int counter;
     NumericType v;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
+//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 template<typename NumericType>
@@ -122,6 +133,12 @@ private:
     std::unique_ptr<Type> value;
 public:
     Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
+    ~Numeric ()
+    {
+        value = nullptr;
+    }
+    
+//    Numeric (const Numeric& other) : value(std::make_unique<Numeric>(other)) {}
 
     template<typename OtherType>
     Numeric& operator=(const OtherType& other)
