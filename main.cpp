@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <limits>
 #include <typeinfo>
+#include "LeakedObjectDetector.h"
 
 /*
 Project 4: Part 9 / 9
@@ -20,14 +21,6 @@ Create a branch named Part9
  
  2) move these macros after the JUCE_LEAK_DETECTOR macro :
  */
-
-#define JUCE_DECLARE_NON_COPYABLE(className) \
-            className (const className&) = delete;\
-            className& operator= (const className&) = delete;
-
-#define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
-            JUCE_DECLARE_NON_COPYABLE(className) \
-            JUCE_LEAK_DETECTOR(className)
 
 /*
  3) add JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary) to the end of the  Temporary<> struct
@@ -83,20 +76,29 @@ struct Temporary
     Temporary(NumericType t) : v(t)
     {
         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
-                  << counter++ << std::endl;
+        << counter++ << std::endl;
     }
+    
+    ~Temporary() = default;
+    
+    Temporary(Temporary&& other) : v(std::move(other.v)) { }
+    
+    Temporary& operator=(Temporary&& other)
+    {
+        v = std::move(other.v);
+        return *this;
+    }
+
     operator NumericType() const { return v; }
     operator NumericType&() { return v; }
 private:
     static int counter;
     NumericType v;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 template<typename NumericType>
 int Temporary<NumericType>::counter = 0;
-
-#include <iostream>
-
 
 struct A {};
 
@@ -119,15 +121,25 @@ struct Numeric
 private:
     std::unique_ptr<Type> value;
 public:
-    Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
+    
+    Numeric (Type v_) : value(std::make_unique<Type>(std::move(v_))) {}
+    
+    ~Numeric() = default;
 
+    Numeric (Numeric&& other) : value(std::move(other.v)) {}
+
+    Numeric& operator=(Numeric&& other)
+    {
+        *value = std::move(static_cast<NumericType>(other));
+        return *this;
+    }
+    
     template<typename OtherType>
     Numeric& operator=(const OtherType& other)
     {
-        //*value += static_cast<NumericType>(other);
-        *value = static_cast<NumericType>(other);
+        *value = static_cast<NumericType>(other); 
         return *this;
-    }    
+    }
     
     template<typename OtherType>
     Numeric& operator+=(const OtherType& other)
@@ -195,37 +207,32 @@ public:
 
     operator NumericType() const { return *value; }
     operator NumericType&() { return *value; }
-    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 template<typename NumericType>
 void add7(std::unique_ptr<NumericType>& val)
 {
-    {
-        *val += static_cast<NumericType>(7.0f);
-    }
+    *val += static_cast<NumericType>(7.0f);
 }
 
 template<typename NumericType>
 void add5(std::unique_ptr<NumericType>& val)
 {
-    {
-        *val += 5;
-    }
+    *val += 5;
 }
 
 template<typename NumericType>
 void add6(std::unique_ptr<NumericType>& val)
 {
-    {
-        *val += 6;
-    }
+    *val += 6;
 }
 
 template<typename NumericType>
 void cube(std::unique_ptr<NumericType>& val)
 {
-    *val = *val * (*val) * (*val);
+    auto& tmp = *val;
+    tmp = tmp * tmp * tmp;
 }
 
 struct Point
@@ -267,7 +274,7 @@ private:
 
  Wait for my code review.
  */
-
+/*
 void part3()
 {
     Numeric<float> ft(5.5f);
@@ -307,7 +314,7 @@ void part3()
     std::cout << "(IntType + DoubleType + FloatType) x 24 = " << it << std::endl;
     
 }
-
+*/
 /*
 void part4()
 {
