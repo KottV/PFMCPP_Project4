@@ -213,31 +213,26 @@ public:
 template<typename NumericType>
 void add7(std::unique_ptr<NumericType>& val)
 {
-    { FIXME remove this unnecessary scoping
-        *val += static_cast<NumericType>(7.0f);
-    }
+    *val += static_cast<NumericType>(7.0f);
 }
 
 template<typename NumericType>
 void add5(std::unique_ptr<NumericType>& val)
 {
-    { FIXME remove this unnecessary scoping
-        *val += 5;
-    }
+    *val += 5;
 }
 
 template<typename NumericType>
 void add6(std::unique_ptr<NumericType>& val)
 {
-    { FIXME remove this unnecessary scoping
-        *val += 6;
-    }
+    *val += 6;
 }
 
 template<typename NumericType>
 void cube(std::unique_ptr<NumericType>& val)
 {
-    *val = *val * (*val) * (*val);
+    auto& tmp = *val;
+    tmp = tmp * tmp * tmp;
 }
 
 struct Point
