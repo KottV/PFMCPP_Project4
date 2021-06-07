@@ -79,34 +79,15 @@ struct Temporary
         << counter++ << std::endl;
     }
     
-     ~Temporary()
-     {
-         std::cout << "I'm destructor" <<std::endl;
-     } 
+    ~Temporary() = default;
     
-//      Temporary(const Temporary& other) : v(other.v)
-//     {
-//          std::cout << "I'm copy constructor" <<std::endl;
-//     }
-         
-//     Temporary& operator=(const Temporary& other)
-//     {
-//         std::cout << "I'm copy assignment of: " << other.v << std::endl;
-//         v = other.v;
-//         return *this;
-//     }
+    Temporary(Temporary&& other) : v(std::move(other.v)) { }
     
-    Temporary(Temporary&& other) : v(std::move(other.v))
+    Temporary& operator=(Temporary&& other)
     {
-        std::cout << "I'm move constructor" <<std::endl;
+        v = std::move(other.v);
+        return *this;
     }
-    
-     Temporary& operator=(Temporary&& other)
-     {
-         std::cout << "I'm move assignment of: " << other.v << std::endl;
-         v = std::move(other.v);
-         return *this;
-     }
 
     operator NumericType() const { return v; }
     operator NumericType&() { return v; }
@@ -140,28 +121,25 @@ struct Numeric
 private:
     std::unique_ptr<Type> value;
 public:
-    Numeric (Type v_) : value(std::make_unique<Type>(v_)) {}
-//     ~Numeric ()
-//     {
-//         value.reset();
-//     }
     
-//    Numeric (const Numeric& other) : value(std::make_unique<Numeric>(other.value)) {} //copy ctor
-    Numeric (Numeric&& other) : value(std::move(other.v)) {} //move ctor
+    Numeric (Type v_) : value(std::make_unique<Type>(std::move(v_))) {}
+    
+    ~Numeric() = default;
 
-    template<typename OtherType>
-    Numeric& operator=(OtherType&& other) //move assignment
+    Numeric (Numeric&& other) : value(std::move(other.v)) {}
+
+    Numeric& operator=(Numeric&& other)
     {
         *value = std::move(static_cast<NumericType>(other));
         return *this;
     }
-//     
-//     template<typename OtherType>
-//     Numeric& operator=(const OtherType& other)
-//     {
-//         *value = static_cast<NumericType>(other);
-//         return *this;
-//     }
+    
+    template<typename OtherType>
+    Numeric& operator=(const OtherType& other)
+    {
+        *value = static_cast<NumericType>(other); 
+        return *this;
+    }
     
     template<typename OtherType>
     Numeric& operator+=(const OtherType& other)
@@ -235,7 +213,7 @@ public:
 template<typename NumericType>
 void add7(std::unique_ptr<NumericType>& val)
 {
-    {
+    { FIXME remove this unnecessary scoping
         *val += static_cast<NumericType>(7.0f);
     }
 }
@@ -243,7 +221,7 @@ void add7(std::unique_ptr<NumericType>& val)
 template<typename NumericType>
 void add5(std::unique_ptr<NumericType>& val)
 {
-    {
+    { FIXME remove this unnecessary scoping
         *val += 5;
     }
 }
@@ -251,7 +229,7 @@ void add5(std::unique_ptr<NumericType>& val)
 template<typename NumericType>
 void add6(std::unique_ptr<NumericType>& val)
 {
-    {
+    { FIXME remove this unnecessary scoping
         *val += 6;
     }
 }
